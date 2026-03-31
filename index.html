@@ -5,289 +5,162 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>William Empreiteiro - Orçamentos</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
         body {
-            background-color: #f0f0f0;
-            padding: 20px;
-        }
-
-        .container {
+            font-family: Arial, sans-serif;
             max-width: 600px;
             margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
             background-color: white;
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
-
-        h1, h2 {
-            color: #2d5d2a;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        h2 {
-            font-size: 22px;
-            border-bottom: 2px solid #2d5d2a;
-            padding-bottom: 10px;
-            text-align: left;
-        }
-
         button {
-            width: 100%;
-            padding: 15px;
-            margin: 8px 0;
-            border: none;
-            border-radius: 5px;
+            padding: 12px 20px;
             background-color: #2d5d2a;
             color: white;
-            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-
-        button:hover {
-            background-color: #1e3d1c;
-        }
-
-        .input-group {
-            margin: 10px 0;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 16px;
-            color: #333;
-        }
-
-        input, textarea {
+        input[type="text"] {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            box-sizing: border-box;
         }
-
-        .detalhes-box {
-            background-color: #f8f8f8;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
+        .detalhes {
             white-space: pre-line;
-        }
-
-        .oculta {
-            display: none;
-        }
-
-        .info-texto {
             margin: 15px 0;
-            font-size: 16px;
-            line-height: 1.6;
         }
     </style>
-    <!-- Biblioteca para gerar PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <!-- TELA INICIAL -->
-        <div id="tela-inicial">
-            <h1>William Pedreiro Geral</h1>
-            <h2>SISTEMA DE ORÇAMENTOS</h2>
-            <div class="info-texto">
-                📏 TIPOS DE CÁLCULO:<br>
-                ➡️ M² = HORIZONTAL X VERTICAL<br>
-                ➡️ M³ = HORIZONTAL X VERTICAL X PROFUNDIDADE<br><br>
+        <h1>William Empreiteiro - Cálculos de Obras</h1>
+        
+        <button onclick="main()">INICIAR SISTEMA</button>
+        <div id="saida" class="detalhes"></div>
 
-                💰 VALORES CONFIRMADOS:<br>
-                ✅ ALVENARIA: R$52,00 POR M²<br>
-                ✅ REBOCO: R$35,00 POR M²<br>
-                ✅ ACABAMENTO (PORCELANATO): R$60,00 POR M²<br>
-                ✅ ACABAMENTO (CERÂMICA): R$40,00 POR M²<br>
-                ✅ CONCRETO: R$150,00 POR M³<br>
-                ✅ GESSO: R$20,00 POR M²<br><br>
-
-                📂 PASTA USADA: DuWilliam17<br>
-                📄 VOCÊ DEFINE O NOME DO ARQUIVO!
-            </div>
-            <button onclick="irParaTela('tela-servicos')">COMEÇAR</button>
-        </div>
-        <!-- TELA DE SERVIÇOS -->
-        <div id="tela-servicos" class="oculta">
-            <h2>🔨 OPÇÕES DE SERVIÇOS</h2>
-            <button onclick="selecionarServico('1')">1 - ALVENARIA (M²)</button>
-            <button onclick="selecionarServico('2')">2 - REBOCO (M²)</button>
-            <button onclick="selecionarServico('3')">3 - ACABAMENTO (PORCELANATO)</button>
-            <button onclick="selecionarServico('4')">4 - ACABAMENTO (CERÂMICA)</button>
-            <button onclick="selecionarServico('5')">5 - CONCRETO (M³)</button>
-            <button onclick="selecionarServico('6')">6 - GESSO (M²)</button>
-            <button onclick="irParaTela('tela-inicial')">VOLTAR PARA INÍCIO</button>
-        </div>
-
-        <!-- TELA DE CÁLCULO -->
-        <div id="tela-calculo" class="oculta">
-            <h2 id="titulo-servico"></h2>
-            <p id="descricao-servico" class="info-texto"></p>
-            <p class="info-texto"><strong>💵 VALOR POR METRO: R$ <span id="valor-por-metro"></span></strong></p>
-
-            <div id="campos-medidas">
-                <!-- Campos de medidas serão adicionados aqui -->
-            </div>
-
-            <button onclick="calcular()">CALCULAR VALOR TOTAL</button>
-            <button onclick="irParaTela('tela-servicos')">VOLTAR PARA SERVIÇOS</button>
-        </div>
-                <!-- TELA DE SERVIÇOS -->
-        <div id="tela-servicos" class="oculta">
-            <h2>🔨 OPÇÕES DE SERVIÇOS</h2>
-            <button onclick="selecionarServico('1')">1 - ALVENARIA (M²)</button>
-            <button onclick="selecionarServico('2')">2 - REBOCO (M²)</button>
-            <button onclick="selecionarServico('3')">3 - ACABAMENTO (PORCELANATO)</button>
-            <button onclick="selecionarServico('4')">4 - ACABAMENTO (CERÂMICA)</button>
-            <button onclick="selecionarServico('5')">5 - CONCRETO (M³)</button>
-            <button onclick="selecionarServico('6')">6 - GESSO (M²)</button>
-            <button onclick="irParaTela('tela-inicial')">VOLTAR PARA INÍCIO</button>
-        </div>
-
-        <!-- TELA DE CÁLCULO -->
-        <div id="tela-calculo" class="oculta">
-            <h2 id="titulo-servico"></h2>
-            <p id="descricao-servico" class="info-texto"></p>
-            <p class="info-texto"><strong>💵 VALOR POR METRO: R$ <span id="valor-por-metro"></span></strong></p>
-
-            <div id="campos-medidas">
-                <!-- Campos de medidas serão adicionados aqui -->
-            </div>
-
-            <button onclick="calcular()">CALCULAR VALOR TOTAL</button>
-            <button onclick="irParaTela('tela-servicos')">VOLTAR PARA SERVIÇOS</button>
-        </div>
-                        alert("❌ APENAS NÚMEROS MAIORES QUE ZERO!");
-                return;
-            }
-            dadosCalculo.valorTotal = novoValor;
-            dadosCalculo.detalhes = dadosCalculo.detalhes.replace(
-                /VALOR TOTAL: R\$ .*/, 
-                `VALOR TOTAL ALTERADO: R$ ${formatarNumero(novoValor)}`
-            );
-            document.getElementById('detalhes-calculos').textContent = dadosCalculo.detalhes;
-            ocultarAlterarValor();
-            alert("✅ VALOR ATUALIZADO COM SUCESSO!");
-        }
-
-        // FUNÇÕES PARA OBSERVAÇÕES
-        function adicionarObservacao() {
-            const texto = document.getElementById('observacoes').value.trim();
-            document.getElementById('observacoes').value = "";
-
-            if (texto === ".") {
-                alert("📝 Observações finalizadas!");
-                return;
-            }
-
-            if (texto.toLowerCase() === "apagar") {
-                if (observacoes.length > 0) {
-                    observacoes.pop();
-                    alert("❌ Última observação apagada!");
-                } else {
-                    alert("⚠️ Nenhuma observação para apagar!");
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script>
+            // ---------------------- FUNÇÕES AUXILIARES ----------------------
+            function validarNumero(mensagem) {
+                while (true) {
+                    const texto = prompt(mensagem).replace('.', '', 1).replace(',', '.');
+                    const numero = parseFloat(texto);
+                    if (!isNaN(numero)) return numero;
+                    alert("❌ APENAS NÚMEROS REAIS (ex: 2,5 ou 2.5)\n");
                 }
-            } else if (texto !== "") {
-                observacoes.push(texto);
-                alert("✅ Observação adicionada!");
-            } else {
-                alert("⚠️ Digite uma observação válida!");
-                return;
             }
 
-            atualizarListaObservacoes();
-        }
-
-        function atualizarListaObservacoes() {
-            const lista = document.getElementById('lista-observacoes');
-            if (observacoes.length === 0) {
-                lista.textContent = "Nenhuma observação informada.";
-                return;
+            function limparTela() {
+                document.getElementById('saida').textContent = "";
             }
-            lista.textContent = observacoes.map((obs, i) => `- ${obs}`).join("\n");
-        }
 
-        // FUNÇÃO PARA GERAR PDF (IGUAL AO PYTHON)
-        function gerarPDF() {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({
-                orientation: 'portrait',
-                unit: 'mm',
-                format: 'a4'
-            });
+            function formatarNumero(num) {
+                if (typeof num !== 'number') {
+                    try {
+                        num = parseFloat(num.replace('.', '', 1).replace(',', '.'));
+                    } catch (e) {
+                        return num;
+                    }
+                }
+                if (num % 1 === 0) {
+                    return num.toLocaleString('pt-BR', { maximumFractionDigits: 0 });
+                } else {
+                    return num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+            }
 
-            // CONFIGURAÇÕES DE FONTE
-            const tituloPrincipal = 24;
-            const tituloSecao = 22;
-            const conteudo = 20;
+            // ---------------------- FUNÇÃO PRINCIPAL ----------------------
+            function main() {
+                limparTela();
+                const servicos = {
+                    "1": {"nome": "ALVENARIA", "tipo": "M²", "valor": 52.00, "desc": "Apenas mão de obra para alvenaria"},
+                    "2": {"nome": "REBOCO", "tipo": "M²", "valor": 35.00, "desc": "Apenas mão de obra para reboco de paredes"},
+                    "3": {"nome": "ACABAMENTO (PORCELANATO)", "tipo": "M²", "valor": 60.00, "desc": "Apenas mão de obra para assentamento de porcelanato"},
+                    "4": {"nome": "ACABAMENTO (CERÂMICA)", "tipo": "M²", "valor": 40.00, "desc": "Apenas mão de obra para assentamento de cerâmica"},
+                    "5": {"nome": "CONCRETO", "tipo": "M³", "valor": 150.00, "desc": "Apenas mão de obra para estruturas"},
+                    "6": {"nome": "GESSO", "tipo": "M²", "valor": 20.00, "desc": "Apenas mão de obra - valor fixo"}
+                };
 
-            // CABEÇALHO
-            pdf.setFontSize(tituloPrincipal);
-            pdf.text("William Empreiteiro - Cálculos de Obras", 105, 16, { align: 'C' });
-            pdf.setLineWidth(0.5);
-            pdf.line(10, 32, 200, 32);
-            pdf.ln(9);
+                // MENU DE SERVIÇOS
+                let opcao = prompt(`
+🔨 OPÇÕES DE SERVIÇOS:
+1 - ALVENARIA
+2 - REBOCO
+3 - ACABAMENTO (PORCELANATO)
+4 - ACABAMENTO (CERÂMICA)
+5 - CONCRETO
+6 - GESSO
+7 - SAIR
 
-            // DADOS DO ORÇAMENTO
-            pdf.setFontSize(tituloSecao);
-            pdf.text("DADOS DO ORÇAMENTO", 10, 40);
-            pdf.setFontSize(conteudo);
-            const data = document.getElementById('data-orcamento').value || new Date().toLocaleDateString('pt-BR');
-            pdf.text(`Serviço: ${servicoAtual.nome}`, 10, 55);
-            pdf.text(`Tipo de Cálculo: ${servicoAtual.tipo}`, 10, 65);
-            pdf.text(`Descrição: ${servicoAtual.desc}`, 10, 75);
-            pdf.text(`Data: ${data}`, 10, 85);
-            pdf.ln(15);
+DIGITE A OPÇÃO DESEJADA:
+                `).trim();
 
-            // RESULTADOS DOS CÁLCULOS
-            pdf.setFontSize(tituloSecao);
-            pdf.text("RESULTADOS DOS CÁLCULOS", 10, pdf.getCurrentPageInfo().y + 5);
-            pdf.setFontSize(conteudo);
-            pdf.text(dadosCalculo.detalhes.replace(/\n/g, '\n'), 10, pdf.getCurrentPageInfo().y + 15, { lineHeightFactor: 1.2 });
-            pdf.ln(15);
+                if (opcao === "7" || opcao === "") {
+                    alert("👋 ATÉ MAIS, PARCEIRO!");
+                    return;
+                }
 
-            // DADOS DO CLIENTE
-            pdf.setFontSize(tituloSecao);
-            pdf.text("DADOS DO CLIENTE", 10, pdf.getCurrentPageInfo().y + 5);
-            pdf.setFontSize(conteudo);
-            const nome = document.getElementById('nome-cliente').value || "Não informado";
-            const endereco = document.getElementById('endereco-obra').value || "Não informado";
-            const email = document.getElementById('email-cliente').value || "Não informado";
-            const telefone = document.getElementById('telefone-cliente').value || "Não informado";
-            
-            pdf.text(`Nome: ${nome}`, 10, pdf.getCurrentPageInfo().y + 15);
-            pdf.text(`Endereço: ${endereco}`, 10, pdf.getCurrentPageInfo().y + 25);
-            pdf.text(`E-mail: ${email}`, 10, pdf.getCurrentPageInfo().y + 35);
-            pdf.text(`Telefone: ${telefone}`, 10, pdf.getCurrentPageInfo().y + 45);
-            pdf.ln(15);
+                if (!servicos[opcao]) {
+                    alert("❌ OPÇÃO INVÁLIDA!");
+                    main();
+                    return;
+                }
 
-            // OBSERVAÇÕES
-            pdf.setFontSize(tituloSecao);
-            pdf.text("OBSERVAÇÕES", 10, pdf.getCurrentPageInfo().y + 5);
-            pdf.setFontSize(conteudo);
-            const obsTexto = observacoes.length > 0 ? observacoes.map(o => `- ${o}`).join("\n") : "Nenhuma observação informada.";
-            pdf.text(obsTexto, 10, pdf.getCurrentPageInfo().y + 15, { lineHeightFactor: 1.2 });
+                const servico = servicos[opcao];
+                const medida1 = validarNumero("📏 DIGITE A MEDIDA 1 (m): ");
+                const medida2 = validarNumero("📏 DIGITE A MEDIDA 2 (m): ");
+                let medida3 = 1;
 
-            // SALVAR PDF
-            const nomeArq = prompt("📄 DEFINA O NOME DO ARQUIVO (sem .pdf):", "ORCAMENTO_PADRAO") || "ORCAMENTO_PADRAO";
-            const nomeFinal = nomeArq.endsWith('.pdf') ? nomeArq : `${nomeArq}.pdf`;
-            
-            pdf.save(nomeFinal);
-            alert(`✅ PDF SALVO COMO: ${nomeFinal}\n📂 VERIFIQUE SUA PASTA DE DOWNLOADS!\n💡 PASTA PADRÃO: DuWilliam17 (se disponível no dispositivo)`);
-        }
-    </script>
+                if (servico.tipo === "M³") {
+                    medida3 = validarNumero("📏 DIGITE A MEDIDA 3 (m): ");
+                }
+
+                const medidaTotal = medida1 * medida2 * medida3;
+                const valorTotal = medidaTotal * servico.valor;
+                const detalhes = `
+📌 SERVIÇO: ${servico.nome}
+📏 TIPO DE CÁLCULO: ${servico.tipo}
+📝 DESCRIÇÃO: ${servico.desc}
+📊 MEDIDAS: ${medida1}m X ${medida2}m ${servico.tipo === "M³" ? `X ${medida3}m` : ""}
+📈 MEDIDA TOTAL: ${formatarNumero(medidaTotal)} ${servico.tipo}
+💵 VALOR TOTAL: R$ ${formatarNumero(valorTotal)}
+                `;
+
+                document.getElementById('saida').textContent = detalhes;
+
+                // GERAR PDF
+                if (confirm("💾 DESEJA GERAR O PDF?")) {
+                    gerarPDF(servico, detalhes);
+                }
+            }
+
+            // ---------------------- GERAR PDF ----------------------
+            function gerarPDF(servico, detalhes) {
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+                
+                pdf.setFontSize(24);
+                pdf.text("William Empreiteiro - Cálculos de Obras", 105, 20, { align: 'C' });
+                pdf.line(10, 35, 200, 35);
+                
+                pdf.setFontSize(18);
+                pdf.text("DADOS DO ORÇAMENTO", 10, 50);
+                pdf.setFontSize(14);
+                pdf.text(detalhes.replace(/\n/g, '\n'), 10, 70);
+                
+                const nomeArq = prompt("📄 DIGITE O NOME DO ARQUIVO:") || "ORCAMENTO";
+                pdf.save(`${nomeArq}.pdf`);
+                alert("✅ PDF SALVO COM SUCESSO!");
+            }
+        </script>
+    </div>
 </body>
 </html>
