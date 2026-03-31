@@ -1,1 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>William Empreiteiro - Cálculos de Obras</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Tela Inicial com imagem do leão -->
+        <div id="tela-inicial" class="tela">
+            <img src="leao (1).jpg" alt="Imagem de Leão" style="width: 100%; border-radius: 12px; margin-bottom: 20px;">
+            <h1>William Pedreiro Geral</h1>
+            <h2>SISTEMA DE ORÇAMENTOS</h2>
+            <div class="info-box">
+                <p><strong>📏 TIPOS DE CÁLCULO:</strong></p>
+                <p>M² = HORIZONTAL X VERTICAL | M³ = HORIZONTAL X VERTICAL X PROFUNDIDADE</p>
+                
+                <p><strong>💰 VALORES CONFIRMADOS:</strong></p>
+                <ul>
+                    <li>ALVENARIA: R$52,00 POR M²</li>
+                    <li>REBOCO: R$35,00 POR M²</li>
+                    <li>ACABAMENTO (PORCELANATO): R$60,00 POR M²</li>
+                    <li>ACABAMENTO (CERÂMICA): R$40,00 POR M²</li>
+                    <li>CONCRETO: R$150,00 POR M³</li>
+                    <li>GESSO: R$20,00 POR M²</li>
+                </ul>
+                <p><strong>📂 ARQUIVOS:</strong> PDF gerado com nome definido por você</p>
+            </div>
+            <button onclick="irParaTela('tela-servicos')">COMEÇAR</button>
+        </div>
+
+        <!-- Tela de Seleção de Serviços -->
+        <div id="tela-servicos" class="tela oculta">
+            <h2>🔨 OPÇÕES DE SERVIÇOS</h2>
+            <div class="servicos-grid">
+                <button onclick="selecionarServico('1')">1 - ALVENARIA (M²)</button>
+                <button onclick="selecionarServico('2')">2 - REBOCO (M²)</button>
+                <button onclick="selecionarServico('3')">3 - ACABAMENTO (PORCELANATO)</button>
+                <button onclick="selecionarServico('4')">4 - ACABAMENTO (CERÂMICA)</button>
+                <button onclick="selecionarServico('5')">5 - CONCRETO (M³)</button>
+                <button onclick="selecionarServico('6')">6 - GESSO (M²)</button>
+            </div>
+            <button onclick="irParaTela('tela-inicial')">VOLTAR PARA INÍCIO</button>
+        </div>
+
+        <!-- Tela de Cálculos -->
+        <div id="tela-calculos" class="tela oculta">
+            <h2 id="titulo-servico"></h2>
+            <p id="desc-servico"></p>
+            <p><strong>💵 VALOR POR METRO: R$ <span id="valor-metro"></span></strong></p>
+
+            <div id="campos-medidas"></div>
+
+            <button onclick="calcularServico()">CALCULAR</button>
+            <button onclick="irParaTela('tela-servicos')">VOLTAR</button>
+        </div>
+
+        <!-- Tela de Resultados e Dados do Cliente -->
+        <div id="tela-resultados" class="tela oculta">
+            <h2>📊 RESULTADO DO CÁLCULO</h2>
+            <p><strong>Serviço: </strong><span id="res-servico"></span></p>
+            <p><strong>Medida Total: </strong><span id="res-medida"></span></p>
+            <p><strong>Valor Total: </strong>R$ <span id="res-valor"></span></p>
+            <div id="res-detalhes" class="detalhes-box"></div>
+
+            <div class="opcao-alterar">
+                <p>✏️ DESEJA ALTERAR O VALOR TOTAL?</p>
+                <button onclick="mostrarCampoAlteracao()">SIM</button>
+                <button onclick="ocultarCampoAlteracao()">NÃO</button>
+                <div id="campo-alteracao" class="oculta">
+                    <input type="text" id="novo-valor" placeholder="Digite o novo valor (ex: 1500,00)">
+                    <button onclick="alterarValorTotal()">ATUALIZAR VALOR</button>
+                </div>
+            </div>
+
+            <div class="dados-cliente">
+                <h3>👤 DADOS DO CLIENTE</h3>
+                <input type="text" id="nome-cliente" placeholder="NOME COMPLETO">
+                <input type="date" id="data-orcamento">
+                <input type="text" id="endereco-obra" placeholder="ENDEREÇO DA OBRA">
+                <input type="email" id="email-cliente" placeholder="E-MAIL (OPCIONAL)">
+                <input type="tel" id="telefone-cliente" placeholder="TELEFONE (OPCIONAL)">
+
+                <h3>📝 OBSERVAÇÕES</h3>
+                <textarea id="observacoes" rows="4" placeholder="Digite suas observações aqui..."></textarea>
+            </div>
+
+            <div class="opcao-salvar">
+                <p>💾 DESEJA INCLUIR OS CÁLCULOS NO PDF?</p>
+                <button onclick="gerarPDF(true)">SIM - GERAR PDF</button>
+                <button onclick="gerarPDF(false)">NÃO - GERAR PDF</button>
+            </div>
+            <button onclick="irParaTela('tela-inicial')">VOLTAR AO INÍCIO</button>
+        </div>
+    </div>
+
+    <script>
+        const servicos = {
+            "1": {"nome": "ALVENARIA", "tipo": "M²", "valor": 52.00, "desc": "Apenas mão de obra para alvenaria"},
+            "2": {"nome": "REBOCO", "tipo": "M²", "valor": 35.00, "desc": "Apenas mão de obra para reboco de paredes"},
+            "3": {"nome": "ACABAMENTO (PORCELANATO)", "tipo": "M²", "valor": 60.00, "desc": "Apenas mão de obra para assentamento de porcelanato"},
+            "4": {"nome": "ACABAMENTO (CERÂMICA)", "tipo": "M²", "valor": 40.00, "desc": "Apenas mão de obra para assentamento de cerâmica"},
+            "5": {"nome": "CONCRETO", "tipo": "M³", "valor": 150.00, "desc": "Apenas mão de obra para estruturas"},
+            "6": {"nome": "GESSO", "tipo": "M²", "valor": 20.00, "desc": "Apenas mão de obra - valor fixo em R$20,00 por m²"}
+        };
+
+        let dadosCalculo = {};
+
+        function irParaTela(idTela) {
+            document.querySelectorAll('.tela').forEach(tela => tela.classList.add('oculta'));
+            document.getElementById(idTela).classList.remove('oculta');
+        }
+
+        function selecionarServico(id) {
+            const servico = servicos[id];
+            dadosCalculo.servico = servico;
+
+            document.getElementById('titulo-servico').textContent = `📌 ${servico.nome} | ${servico.tipo}`;
+            document.getElementById('desc-servico').textContent = servico.desc;
+            document.getElementById('valor-metro').textContent = formatarNumero(servico.valor);
+
+            const camposContainer = document.getElementById('campos-medidas');
+            camposContainer.innerHTML = `<p><strong>📏 INSIRA AS MEDIDAS EM METROS:</strong></p>`;
+            
+            if (servico.tipo === "M²") {
+                camposContainer.innerHTML += `
+                    <input type="number" step="0.01" id="horizontal" placeholder="HORIZONTAL (m)" required>
+                    <input type="number" step="0.01" id="vertical" placeholder="VERTICAL (m)" required>
+                `;
+            } else {
+                camposContainer.innerHTML += `
+                    <input type="number" step="0.01" id="horizontal" placeholder="HORIZONTAL (m)" required>
+                    <input type="number" step="0.01" id="vertical" placeholder="VERTICAL (m)" required>
+                    <input type="number" step="0.01" id="profundidade" placeholder="PROFUNDIDADE/ALTURA (m)" required>
+                `;
+            }
+
+            irParaTela('tela-calculos');
+        }
+
+        function formatarNumero(num) {
+            if (isNaN(num)) return num;
+            const numero = parseFloat(num);
+            return numero.toLocaleString('pt-BR', {
+                minimumFractionDigits: numero.isInteger() ? 0 : 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        function validarNumero(valor) {
+            const num = parseFloat(valor.replace(',', '.'));
+            return isNaN(num) ? 0 : num;
+        }
+
+        function calcularServico() {
+            const servico = dadosCalculo.servico;
+            const horizontal = validarNumero(document.getElementById('horizontal').value);
+            const vertical = validarNumero(document.getElementById('vertical').value);
+            
+            let medidaTotal, valorTotal, detalhes;
+
+            if (servico.tipo === "M²") {
+                medidaTotal = horizontal * vertical;
+                valorTotal = medidaTotal * servico.valor;
+                detalhes = `
+                    FÓRMULA: HORIZONTAL X VERTICAL<br>
+                    Medidas: ${formatarNumero(horizontal)}m X ${formatarNumero(vertical)}m = ${formatarNumero(medidaTotal)}${servico.tipo}<br>
+                    Valor por ${servico.tipo}: R$ ${formatarNumero(servico.valor)}<br>
+                    VALOR TOTAL: R$ ${formatarNumero(valorTotal)}
+                `;
+            } else {
+                const profundidade = validarNum
 
