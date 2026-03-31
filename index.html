@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faça o seu Orçamento</title>
+    <!-- Bibliotecas para gerar PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Estilos do site -->
     <style>
         * {
             margin: 0;
@@ -116,6 +118,7 @@
 
     <div class="resultado-site" id="resultado-site" style="display: none;"></div>
 
+    <!-- Começo da parte JavaScript -->
     <script>
         // Dados dos serviços
         const precos = {
@@ -133,7 +136,7 @@
             document.getElementById('medida3').style.display = (servico === 'concreto') ? 'block' : 'none';
         });
 
-        // Função de cálculo - FUNCIONAL 100%
+        // Função de cálculo
         function calcular() {
             const servico = document.getElementById('servico').value;
             const med1 = parseFloat(document.getElementById('medida1').value);
@@ -168,7 +171,7 @@ VALOR TOTAL: R$ ${valorTotal.toFixed(2)}
             document.getElementById('resultado-site').style.display = 'block';
         }
 
-        // Função GERAR PDF - FUNCIONAL 100%
+        // Função GERAR PDF
         function gerarPDF() {
             // Verifica se já calculou o orçamento
             const resultadoVisivel = document.getElementById('resultado-site').style.display === 'block';
@@ -247,7 +250,7 @@ VALOR TOTAL: R$ ${valorTotal.toFixed(2)}
             pdf.save(`Orçamento_${nome.replace(/\s/g, '_')}.pdf`);
         }
 
-        // Função limpar - FUNCIONAL
+        // Função limpar
         function limpar() {
             document.querySelectorAll('input, select, textarea').forEach(el => el.value = '');
             document.getElementById('resultado-site').style.display = 'none';
