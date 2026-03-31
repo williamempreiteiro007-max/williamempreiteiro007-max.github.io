@@ -1,1 +1,127 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f0f0f0;
+    padding: 15px;
+    color: #333;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.tela {
+    width: 100%;
+}
+
+.oculta {
+    display: none;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2d5e2f;
+}
+
+h1 {
+    font-size: 28px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 20px;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.info-box {
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.servicos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+input, textarea, button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 18px;
+}
+
+button {
+    background-color: #2d5e2f;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #1e3f1f;
+}
+
+.detalhes-box {
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    line-height: 1.6;
+}
+
+.opcao-alterar, .opcao-salvar {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.opcao-alterar button, .opcao-salvar button {
+    width: 45%;
+    display: inline-block;
+    margin: 5px;
+}
+
+#campo-alteracao {
+    margin-top: 10px;
+}
+
+/* Ajustes para celular Android */
+@media screen and (max-width: 480px) {
+    .container {
+        padding: 10px;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .servicos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .opcao-alterar button, .opcao-salvar button {
+        width: 100%;
+    }
+}
 
