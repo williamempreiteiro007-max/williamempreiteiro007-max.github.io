@@ -5,36 +5,164 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>William Empreiteiro - Orçamentos</title>
     <style>
+        /* Estilo geral do site */
         body {
             font-family: system-ui, sans-serif;
             background-color: #f8f9fa;
-            text-align: center;
-            padding: 30px;
             margin: 0;
+            padding: 0;
+            color: #333;
         }
+
+        /* Cabeçalho com imagem e título */
+        .cabecalho {
+            background-color: #2c3e50;
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
         .leao {
-            width: 200px;
-            height: 200px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             border: 5px solid #FF8C00;
+            margin-bottom: 20px;
         }
-        h1 {
+
+        .cabecalho h1 {
             color: #FF8C00;
-            margin-top: 20px;
-            font-size: 2rem;
+            margin: 0;
+            font-size: 2.5rem;
         }
-        p {
-            font-size: 1.1rem;
-            color: #333;
-            max-width: 600px;
-            margin: 10px auto;
+
+        .cabecalho p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        /* Seção de serviços */
+        .servicos {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .servicos h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .cartao-servico {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: inline-block;
+            width: 280px;
+            vertical-align: top;
+        }
+
+        .cartao-servico h3 {
+            color: #FF8C00;
+            margin-top: 0;
+        }
+
+        /* Botões funcionais */
+        .botoes {
+            background-color: #FF8C00;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .botoes:hover {
+            background-color: #e67e00;
+        }
+
+        /* Rodapé */
+        .rodape {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
-    <img src="https://i.postimg.cc/XYSHLS21/leao-(1).jpg" class="leao" alt="Leão Logo">
-    <h1>Sistema de Orçamentos da Construção Civil</h1>
-    <p>Calcula medidas em m² e m³ para serviços como alvenaria, reboco, porcelanato e mais!</p>
-    <p>Gera PDFs completos com dados do cliente e resultados dos cálculos!</p>
+    <!-- Cabeçalho -->
+    <div class="cabecalho">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Lion_waiting_in_Namibia.jpg/800px-Lion_waiting_in_Namibia.jpg" alt="Leão - Logo William Empreiteiro" class="leao">
+        <h1>Sistema de Orçamentos</h1>
+        <p>Construção Civil com Qualidade e Transparência!</p>
+        <button class="botoes" onclick="abrirWhatsapp()">Falar comigo no WhatsApp</button>
+        <button class="botoes" onclick="abrirFormulario()">Solicitar Orçamento</button>
+    </div>
+
+    <!-- Seção de serviços -->
+    <div class="servicos">
+        <h2>O que fazemos?</h2>
+        
+        <div class="cartao-servico">
+            <h3>Alvenaria</h3>
+            <p>Cálculo preciso em m² para paredes, lajes e estruturas de alvenaria.</p>
+            <button class="botoes" onclick="mostrarInfo('alvenaria')">Ver detalhes</button>
+        </div>
+
+        <div class="cartao-servico">
+            <h3>Reboco</h3>
+            <p>Medidas e custos para reboco interno e externo, com materiais de qualidade.</p>
+            <button class="botoes" onclick="mostrarInfo('reboco')">Ver detalhes</button>
+        </div>
+
+        <div class="cartao-servico">
+            <h3>Porcelanato</h3>
+            <p>Cálculo de área e quantidade de peças para piso e parede.</p>
+            <button class="botoes" onclick="mostrarInfo('porcelanato')">Ver detalhes</button>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <div class="rodape">
+        <p>William Empreiteiro © 2026 - Todos os direitos reservados</p>
+    </div>
+
+    <!-- Código para fazer os botões funcionarem -->
+    <script>
+        // Abre o WhatsApp
+        function abrirWhatsapp() {
+            // Troque o número pelo seu (com código do país)
+            const numero = "5531999999999";
+            const mensagem = "Olá William! Gostaria de saber mais sobre os orçamentos de construção civil.";
+            window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`, '_blank');
+        }
+
+        // Abre um formulário (ou mostra uma mensagem)
+        function abrirFormulario() {
+            alert("Em breve formulário para solicitar orçamento online! Por enquanto, entre em contato pelo WhatsApp 😉");
+        }
+
+        // Mostra informações sobre cada serviço
+        function mostrarInfo(servico) {
+            let mensagem = "";
+            if (servico === "alvenaria") {
+                mensagem = "Alvenaria: Trabalhamos com blocos de concreto, tijolos cerâmicos e lajes armadas. Incluímos cálculo de cimento, areia e brita!";
+            } else if (servico === "reboco") {
+                mensagem = "Reboco: Usamos materiais à prova de umidade. Cálculo inclui massa corrida, argamassa e mão de obra especializada!";
+            } else if (servico === "porcelanato") {
+                mensagem = "Porcelanato: Calculamos corte de peças e espaçamento entre elas. Incluímos adesivo e rejunte!";
+            }
+            alert(mensagem);
+        }
+    </script>
 </body>
 </html>
