@@ -1,139 +1,24 @@
-/* ========== ESTILOS GLOBAIS PARA TODO O SITE ========== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+// DADOS GLOBAIS DOS SERVIÇOS
+const SERVICES = {
+    1: { name: "ALVENARIA", type: "m²", price: 52.00 },
+    2: { name: "REBOCO", type: "m²", price: 35.00 },
+    3: { name: "PORCELANATO", type: "m²", price: 60.00 },
+    4: { name: "CERÂMICA", type: "m²", price: 40.00 },
+    5: { name: "CONCRETO", type: "m³", price: 150.00 },
+    6: { name: "GESSO", type: "m²", price: 20.00 }
+};
+
+// FUNÇÃO PARA SALVAR DADOS NO ARMAZENAMENTO
+function saveData(key, value) {
+    localStorage.setItem(key, value);
 }
 
-body {
-    background-color: #f0f2f5;
-    padding: 20px;
-    width: 100vw;
-    overflow-x: hidden;
+// FUNÇÃO PARA CARREGAR DADOS
+function loadData(key) {
+    return localStorage.getItem(key);
 }
 
-/* CONTAINER PRINCIPAL DE TODAS AS PÁGINAS */
-.container {
-    max-width: 100%;
-    margin: 0 auto;
-    background-color: white;
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+// FUNÇÃO PARA NAVEGAR ENTRE PÁGINAS
+function goToPage(page) {
+    window.location.href = page;
 }
-
-/* IMAGEM DO LEÃO */
-.lion-img {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    border: 4px solid #2d5d2a;
-    display: block;
-    margin: 0 auto 20px auto;
-    object-fit: cover;
-}
-
-/* TÍTULOS */
-h1 {
-    color: #2d5d2a;
-    text-align: center;
-    font-size: 22px;
-    margin-bottom: 25px;
-}
-
-/* GRUPO DE INPUTS */
-.input-group {
-    margin-bottom: 20px;
-}
-
-.input-group label {
-    display: block;
-    color: #333;
-    font-size: 18px;
-    margin-bottom: 8px;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 18px;
-}
-
-/* GRID DE SERVIÇOS */
-.services-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 30px;
-}
-
-/* CARDS DE SERVIÇOS */
-.service-card {
-    background-color: white;
-    border: 2px solid #2d5d2a;
-    border-radius: 12px;
-    padding: 15px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: #333;
-}
-
-.service-card:hover, .service-card.selected {
-    background-color: #2d5d2a;
-    color: white;
-}
-
-.service-card h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.service-card p {
-    font-size: 14px;
-}
-
-/* CAIXA DE RESULTADO */
-.result-box {
-    background-color: #f8f9fa;
-    border: 1px solid #2d5d2a;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 25px 0;
-    font-size: 18px;
-    white-space: pre-line;
-}
-
-/* BOTÕES */
-.btn {
-    width: 100%;
-    padding: 18px;
-    border: none;
-    border-radius: 10px;
-    font-size: 20px;
-    cursor: pointer;
-    margin-bottom: 15px;
-    transition: background 0.3s ease;
-}
-
-.btn-primary {
-    background-color: #2d5d2a;
-    color: white;
-}
-
-.btn-primary:hover {
-    background-color: #1e3d1c;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: white;
-}
-
-.btn-secondary:hover {
-    background-color: #545b62;
-}
-
