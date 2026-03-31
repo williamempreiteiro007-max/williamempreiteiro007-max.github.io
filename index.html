@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -101,11 +102,11 @@
 <body>
     <!-- Cabeçalho -->
     <div class="cabecalho">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Lion_waiting_in_Namibia.jpg/800px-Lion_waiting_in_Namibia.jpg" alt="Leão - Logo William Empreiteiro" class="leao">
+        <img src="leao (1).jpg" alt="Leão - Logo William Empreiteiro" class="leao">
         <h1>Sistema de Orçamentos</h1>
         <p>Construção Civil com Qualidade e Transparência!</p>
         <button class="botoes" onclick="abrirWhatsapp()">Falar comigo no WhatsApp</button>
-        <button class="botoes" onclick="abrirFormulario()">Solicitar Orçamento</button>
+        <button class="botoes" onclick="solicitarOrcamento()">Solicitar Orçamento</button>
     </div>
 
     <!-- Seção de serviços -->
@@ -115,19 +116,19 @@
         <div class="cartao-servico">
             <h3>Alvenaria</h3>
             <p>Cálculo preciso em m² para paredes, lajes e estruturas de alvenaria.</p>
-            <button class="botoes" onclick="mostrarInfo('alvenaria')">Ver detalhes</button>
+            <button class="botoes" onclick="mostrarDetalhes('alvenaria')">Ver detalhes</button>
         </div>
 
         <div class="cartao-servico">
             <h3>Reboco</h3>
             <p>Medidas e custos para reboco interno e externo, com materiais de qualidade.</p>
-            <button class="botoes" onclick="mostrarInfo('reboco')">Ver detalhes</button>
+            <button class="botoes" onclick="mostrarDetalhes('reboco')">Ver detalhes</button>
         </div>
 
         <div class="cartao-servico">
             <h3>Porcelanato</h3>
             <p>Cálculo de área e quantidade de peças para piso e parede.</p>
-            <button class="botoes" onclick="mostrarInfo('porcelanato')">Ver detalhes</button>
+            <button class="botoes" onclick="mostrarDetalhes('porcelanato')">Ver detalhes</button>
         </div>
     </div>
 
@@ -136,30 +137,29 @@
         <p>William Empreiteiro © 2026 - Todos os direitos reservados</p>
     </div>
 
-    <!-- Código para fazer os botões funcionarem -->
+    <!-- Script dos botões -->
     <script>
-        // Abre o WhatsApp
+        // Botão WhatsApp - COLOQUE SEU NÚMERO AQUI!
         function abrirWhatsapp() {
-            // Troque o número pelo seu (com código do país)
-            const numero = "5531999999999";
-            const mensagem = "Olá William! Gostaria de saber mais sobre os orçamentos de construção civil.";
+            const numero = "+553190721928"; // SEU NÚMERO COM DDD E CÓDIGO DO PAÍS (55)
+            const mensagem = "Olá William! Gostaria de saber mais sobre os orçamentos!";
             window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`, '_blank');
         }
 
-        // Abre um formulário (ou mostra uma mensagem)
-        function abrirFormulario() {
-            alert("Em breve formulário para solicitar orçamento online! Por enquanto, entre em contato pelo WhatsApp 😉");
+        // Botão solicitar orçamento
+        function solicitarOrcamento() {
+            alert("Em breve formulário completo! Por enquanto, entre em contato pelo WhatsApp 😉");
         }
 
-        // Mostra informações sobre cada serviço
-        function mostrarInfo(servico) {
+        // Botões de detalhes dos serviços
+        function mostrarDetalhes(servico) {
             let mensagem = "";
-            if (servico === "alvenaria") {
-                mensagem = "Alvenaria: Trabalhamos com blocos de concreto, tijolos cerâmicos e lajes armadas. Incluímos cálculo de cimento, areia e brita!";
-            } else if (servico === "reboco") {
-                mensagem = "Reboco: Usamos materiais à prova de umidade. Cálculo inclui massa corrida, argamassa e mão de obra especializada!";
-            } else if (servico === "porcelanato") {
-                mensagem = "Porcelanato: Calculamos corte de peças e espaçamento entre elas. Incluímos adesivo e rejunte!";
+            if(servico === 'alvenaria') {
+                mensagem = "Alvenaria: Trabalhamos com blocos de concreto, tijolos cerâmicos. Cálculo inclui cimento, areia e brita!";
+            } else if(servico === 'reboco') {
+                mensagem = "Reboco: Reboco interno e externo, com argamassa à prova d'água. Inclui mão de obra!";
+            } else if(servico === 'porcelanato') {
+                mensagem = "Porcelanato: Cálculo de área, corte de peças e quantidade de rejunte!";
             }
             alert(mensagem);
         }
