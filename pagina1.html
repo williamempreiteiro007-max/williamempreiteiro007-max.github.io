@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>William Empreiteiro - Página Inicial</title>
+    <link rel="stylesheet" href="global.css">
+</head>
+<body>
+    <div class="container">
+        <!-- IMAGEM DO LEÃO -->
+        <img src="https://i.postimg.cc/XYSHLS21/leao-(1).jpg" alt="William Empreiteiro" class="lion-img">
+        
+        <!-- TÍTULO -->
+        <h1>WILLIAM EMPREITEIRO - ORÇAMENTOS</h1>
+
+        <!-- GRID DE SERVIÇOS -->
+        <div class="services-grid" id="services-grid">
+            <div class="service-card" data-id="1">
+                <h3>ALVENARIA</h3>
+                <p>R$52,00 / m²</p>
+            </div>
+            <div class="service-card" data-id="2">
+                <h3>REBOCO</h3>
+                <p>R$35,00 / m²</p>
+            </div>
+            <div class="service-card" data-id="3">
+                <h3>PORCELANATO</h3>
+                <p>R$60,00 / m²</p>
+            </div>
+            <div class="service-card" data-id="4">
+                <h3>CERÂMICA</h3>
+                <p>R$40,00 / m²</p>
+            </div>
+            <div class="service-card" data-id="5">
+                <h3>CONCRETO</h3>
+                <p>R$150,00 / m³</p>
+            </div>
+            <div class="service-card" data-id="6">
+                <h3>GESSO</h3>
+                <p>R$20,00 / m²</p>
+            </div>
+        </div>
+
+        <!-- BOTÃO DE NAVEGAÇÃO -->
+        <button class="btn btn-primary" id="next-btn">IR PARA PÁGINA 2</button>
+    </div>
+
+    <script src="global.js"></script>
+    <script>
+        let selectedServiceId = null;
+
+        // FUNÇÃO PARA SELECIONAR SERVIÇO
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // REMOVER SELEÇÃO ANTERIOR
+                document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+                // MARCAR O SERVIÇO SELECIONADO
+                card.classList.add('selected');
+                selectedServiceId = card.dataset.id;
+            });
+        });
+
+        // FUNÇÃO PARA IR PARA PÁGINA 2
+        document.getElementById('next-btn').addEventListener('click', () => {
+            if (!selectedServiceId) {
+                alert('SELECIONE UM SERVIÇO PRIMEIRO!');
+                return;
+            }
+
+            // SALVAR DADOS NO ARMAZENAMENTO
+            saveToStorage('serviceId', selectedServiceId);
+            saveToStorage('serviceName', SERVICES[selectedServiceId].name);
+            saveToStorage('serviceType', SERVICES[selectedServiceId].type);
+            saveToStorage('servicePrice', SERVICES[selectedServiceId].price);
+
+            // ABRIR PÁGINA 2
+            goToPage('pagina2');
+        });
+    </script>
+</body>
+</html>
 
