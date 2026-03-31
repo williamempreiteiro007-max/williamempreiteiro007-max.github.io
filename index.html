@@ -15,7 +15,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(120deg, #ffeaa7 0%, #fab1a0 33%, #74b9ff 66%, #0984e3 100%);
             padding: 20px;
             max-width: 700px;
             margin: 0 auto;
@@ -24,10 +24,9 @@
 
         .container-principal {
             background-color: white;
-            border-radius: 15px;
+            border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-top: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
         }
 
         .leao-logo {
@@ -36,117 +35,129 @@
             border-radius: 50%;
             display: block;
             margin: 0 auto 20px;
-            border: 5px solid #FF8C00;
-            box-shadow: 0 5px 15px rgba(255,140,0,0.2);
+            border: 5px solid #FF9800;
+            box-shadow: 0 8px 25px rgba(255,152,0,0.3);
         }
 
         h1 {
             text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
+            color: #2d3436;
             font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* MENSAGEM DE VALOR SUPER CHAMATIVA */
+        .valor-destaque {
+            background: linear-gradient(90deg, #FF5722 0%, #FF9800 50%, #FFC107 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 0 0 30px 0;
+            box-shadow: 0 8px 25px rgba(255,87,34,0.3);
+            border: 3px solid white;
+        }
+
+        .valor-destaque p:first-child {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
             font-weight: 600;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-            padding: 20px;
+        .valor-final {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            background-color: white;
+            color: #FF5722;
+            padding: 10px 25px;
             border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .grupo-formulario {
+            margin-bottom: 25px;
+            padding: 20px;
             background-color: #f8f9fa;
-            border-left: 4px solid #FF8C00;
+            border-radius: 15px;
+            border-left: 5px solid #FF9800;
+        }
+
+        .grupo-formulario h2 {
+            color: #2d3436;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 500;
-            color: #2c3e50;
+            color: #2d3436;
+            font-weight: 600;
             font-size: 1.05rem;
         }
 
         input, select, textarea {
             width: 100%;
             padding: 12px 15px;
+            margin-bottom: 15px;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #FF8C00;
-            box-shadow: 0 0 0 3px rgba(255,140,0,0.1);
+            border-color: #FF9800;
+            box-shadow: 0 0 0 3px rgba(255,152,0,0.2);
         }
 
-        /* BOTÕES MODERNOS E CHAMATIVOS */
-        .botoes-container {
+        /* BOTÕES MODERNOS E COLORIDOS */
+        .botoes-area {
             display: flex;
-            gap: 15px;
-            margin: 30px 0;
+            gap: 20px;
+            margin-top: 30px;
         }
 
         .btn {
             flex: 1;
-            padding: 15px 20px;
+            padding: 18px;
             border: none;
-            border-radius: 10px;
+            border-radius: 15px;
             font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
 
         .btn-calcular {
-            background: linear-gradient(135deg, #FF8C00 0%, #FFA500 100%);
+            background: linear-gradient(135deg, #FF9800 0%, #FFC107 100%);
             color: white;
-        }
-
-        .btn-calcular:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,140,0,0.3);
         }
 
         .btn-pdf {
-            background: linear-gradient(135deg, #2c3e50 0%, #4a6990 100%);
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
             color: white;
-        }
-
-        .btn-pdf:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(44,62,80,0.3);
         }
 
         .btn-limpar {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            background: linear-gradient(135deg, #E53935 0%, #C62828 100%);
             color: white;
         }
 
-        .btn-limpar:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(231,76,60,0.3);
-        }
-
-        /* MENSAGEM DE VALOR EM DESTAQUE */
-        .resultado-site {
-            background: linear-gradient(135deg, #FF8C00 0%, #FFA500 100%);
-            color: white;
-            font-weight: 600;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin: 20px 0;
-            font-size: 1.2rem;
-            white-space: pre-line;
-            box-shadow: 0 5px 15px rgba(255,140,0,0.2);
-        }
-
-        textarea {
-            resize: none;
-            min-height: 80px;
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
         }
     </style>
 </head>
@@ -154,179 +165,179 @@
     <div class="container-principal">
         <img src="https://i.postimg.cc/XYSHLS21/leao-(1).jpg" alt="Logo Leão" class="leao-logo">
         <h1>📐 Faça o seu Orçamento de Construção</h1>
-        
-        <div class="form-group">
-            <label>1. 🛠️ ESCOLHA O SERVIÇO:</label>
+
+        <!-- MENSAGEM DE VALOR BEM EM CIMA -->
+        <div class="valor-destaque" id="valor-destaque" style="display: none;">
+            <p>✅ Valor do Orçamento</p>
+            <span class="valor-final" id="valor-final"></span>
+        </div>
+
+        <!-- GRUPO DE SERVIÇOS -->
+        <div class="grupo-formulario">
+            <h2>🛠️ Selecione o Serviço</h2>
+            <label for="servico">Tipo de Serviço:</label>
             <select id="servico">
-                <option value="alvenaria">ALVENARIA (M²) - R$52,00</option>
-                <option value="reboco">REBOCO (M²) - R$35,00</option>
-                <option value="porcelanato">PORCELANATO (M²) - R$60,00</option>
-                <option value="ceramica">CERÂMICA (M²) - R$40,00</option>
-                <option value="concreto">CONCRETO (M³) - R$150,00</option>
-                <option value="gesso">GESSO (M²) - R$20,00</option>
+                <option value="alvenaria">Alvenaria - R$52,00/m²</option>
+                <option value="reboco">Reboco - R$35,00/m²</option>
+                <option value="porcelanato">Porcelanato - R$60,00/m²</option>
+                <option value="ceramica">Cerâmica - R$40,00/m²</option>
+                <option value="concreto">Concreto - R$150,00/m³</option>
             </select>
+
+            <label for="medida1">Medida 1 (Horizontal em m):</label>
+            <input type="number" id="medida1" placeholder="Ex: 2">
+            
+            <label for="medida2">Medida 2 (Vertical em m):</label>
+            <input type="number" id="medida2" placeholder="Ex: 6">
+            
+            <label for="medida3" id="label-medida3" style="display: none;">Medida 3 (Profundidade em m - só para Concreto):</label>
+            <input type="number" id="medida3" placeholder="Ex: 0.5" style="display: none;">
         </div>
 
-        <div class="form-group">
-            <label>2. 📏 MEDIDAS (em metros):</label>
-            <input type="number" id="medida1" placeholder="Horizontal (m)" step="0.01" min="0">
-            <input type="number" id="medida2" placeholder="Vertical (m)" step="0.01" min="0">
-            <input type="number" id="medida3" placeholder="Profundidade (apenas para M³)" step="0.01" min="0" style="display: none; margin-top: 10px;">
+        <!-- GRUPO DE DADOS DO CLIENTE -->
+        <div class="grupo-formulario">
+            <h2>👤 Dados do Cliente</h2>
+            <label for="nome">Nome Completo:</label>
+            <input type="text" id="nome" placeholder="Seu nome">
+            
+            <label for="data">Data do Orçamento:</label>
+            <input type="date" id="data">
+            
+            <label for="endereco">Endereço da Obra:</label>
+            <input type="text" id="endereco" placeholder="Rua, bairro, cidade">
+            
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" placeholder="seu@email.com">
+            
+            <label for="telefone">Telefone:</label>
+            <input type="text" id="telefone" placeholder="(XX) XXXXX-XXXX">
+            
+            <label for="obs">Observações:</label>
+            <textarea id="obs" placeholder="Alguma observação importante..."></textarea>
         </div>
 
-        <!-- MENSAGEM DE VALOR NO MEIO -->
-        <div class="resultado-site" id="resultado-site" style="display: none;">
-            SERVIÇO: ALVENARIA
-            MEDIDA TOTAL: 12.00 M²
-            VALOR TOTAL: R$ 624.00
-        </div>
-
-        <div class="form-group">
-            <label>3. 🧑‍🤝‍🧑 DADOS DO CLIENTE:</label>
-            <input type="text" id="nome" placeholder="Nome completo">
-            <input type="date" id="data" style="margin-top: 10px;">
-            <input type="text" id="endereco" placeholder="Endereço da obra" style="margin-top: 10px;">
-            <input type="email" id="email" placeholder="E-mail (opcional)" style="margin-top: 10px;">
-            <input type="text" id="telefone" placeholder="Telefone (opcional)" style="margin-top: 10px;">
-            <textarea id="obs" placeholder="Observações" style="margin-top: 10px;"></textarea>
-        </div>
-
-        <div class="botoes-container">
-            <button class="btn btn-calcular" onclick="calcular()">Calcular</button>
+        <!-- ÁREA DOS BOTÕES -->
+        <div class="botoes-area">
+            <button class="btn btn-calcular" onclick="calcularOrcamento()">Calcular</button>
             <button class="btn btn-pdf" onclick="gerarPDF()">Gerar PDF</button>
-            <button class="btn btn-limpar" onclick="limpar()">Limpar</button>
-        </div>
-    </div>
-
-    <script>
-        // Dados dos serviços
-        const precos = {
+            <button class="btn btn-limpar" onclick="limparFormulario()">Limpar</button>
+                </div>
+                    <script>
+        // DADOS DOS SERVIÇOS
+        const precosServicos = {
             alvenaria: 52.00,
             reboco: 35.00,
             porcelanato: 60.00,
             ceramica: 40.00,
-            concreto: 150.00,
-            gesso: 20.00
+            concreto: 150.00
         };
 
-        // Ajusta campos de medida conforme serviço
+        // MOSTRA CAMPO DE PROFUNDIDADE APENAS PARA CONCRETO
         document.getElementById('servico').addEventListener('change', function() {
-            const servico = this.value;
-            document.getElementById('medida3').style.display = (servico === 'concreto') ? 'block' : 'none';
+            const servicoSelecionado = this.value;
+            const medida3 = document.getElementById('medida3');
+            const labelMedida3 = document.getElementById('label-medida3');
+            
+            if(servicoSelecionado === 'concreto') {
+                medida3.style.display = 'block';
+                labelMedida3.style.display = 'block';
+            } else {
+                medida3.style.display = 'none';
+                labelMedida3.style.display = 'none';
+            }
         });
 
-        // Função de cálculo
-        function calcular() {
+        // FUNÇÃO DE CÁLCULO
+        function calcularOrcamento() {
             const servico = document.getElementById('servico').value;
             const med1 = parseFloat(document.getElementById('medida1').value);
             const med2 = parseFloat(document.getElementById('medida2').value);
-            let med3 = parseFloat(document.getElementById('medida3').value);
+            const med3 = parseFloat(document.getElementById('medida3').value) || 0;
 
-            if (!med1 || !med2 || (servico === 'concreto' && !med3)) {
-                alert("⚠️ Preencha todas as medidas obrigatórias!");
+            // VERIFICA SE OS CAMPOS ESTÃO PREENCHIDOS
+            if(!med1 || !med2 || (servico === 'concreto' && !med3)) {
+                alert('⚠️ Preencha todas as medidas obrigatórias primeiro!');
                 return;
             }
 
+            // CALCULA O VALOR TOTAL
             let medidaTotal = 0;
-            let tipoMedida = "M²";
-            let valorTotal = 0;
-
-            if(servico === 'concreto'){
+            let unidade = 'm²';
+            
+            if(servico === 'concreto') {
                 medidaTotal = med1 * med2 * med3;
-                tipoMedida = "M³";
-                valorTotal = medidaTotal * precos.concreto;
+                unidade = 'm³';
             } else {
                 medidaTotal = med1 * med2;
-                valorTotal = medidaTotal * precos[servico];
             }
 
-            const resultado = `
-📊 SERVIÇO: ${servico.toUpperCase()}
-📏 MEDIDA TOTAL: ${medidaTotal.toFixed(2)} ${tipoMedida}
-💰 VALOR TOTAL: R$ ${valorTotal.toFixed(2)}
-            `;
-            document.getElementById('resultado-site').textContent = resultado;
-            document.getElementById('resultado-site').style.display = 'block';
+            const valorTotal = medidaTotal * precosServicos[servico];
+            const valorFormatado = `R$ ${valorTotal.toFixed(2)} (${medidaTotal.toFixed(2)} ${unidade})`;
+
+            // MOSTRA A MENSAGEM EM DESTAQUE NO TOPO
+            const areaDestaque = document.getElementById('valor-destaque');
+            const valorFinal = document.getElementById('valor-final');
+            
+            valorFinal.textContent = valorFormatado;
+            areaDestaque.style.display = 'block';
         }
 
-        // Função GERAR PDF COMPLETA
+        // FUNÇÃO PARA GERAR PDF NA PASTA DOCUMENTOS
         function gerarPDF() {
-            const resultadoVisivel = document.getElementById('resultado-site').style.display === 'block';
-            if (!resultadoVisivel) {
-                alert("⚠️ Calcule o orçamento primeiro!");
+            const valorDestaque = document.getElementById('valor-destaque').style.display;
+            if(valorDestaque === 'none') {
+                alert('⚠️ Calcule o orçamento primeiro!');
                 return;
             }
 
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF({
                 orientation: 'portrait',
-                unit: 'pt',
+                unit: 'mm',
                 format: 'a4'
             });
 
-            pdf.setFont("Helvetica");
+            // CONFIGURAÇÕES DO PDF
+            pdf.setFontSize(20);
+            pdf.text('📐 ORÇAMENTO DE CONSTRUÇÃO', 105, 20, { align: 'center' });
             
-            // Título principal - 24pt
-            pdf.setFontSize(24);
-            pdf.text("Faça o seu Orçamento", 200, 30, { align: 'center' });
+            // ADICIONA LOGO
+            pdf.addImage('https://i.postimg.cc/XYSHLS21/leao-(1).jpg', 'JPG', 85, 30, 40, 40);
+            pdf.setDrawColor(255,152,0);
+            pdf.circle(105, 50, 20);
 
-            // Imagem do leão
-            pdf.addImage("https://i.postimg.cc/XYSHLS21/leao-(1).jpg", 'JPG', 180, 40, 40, 40);
-            pdf.setDrawColor(255,140,0);
-            pdf.circle(200, 60, 20);
+            // DADOS DO CLIENTE NO PDF
+            pdf.setFontSize(14);
+            pdf.text('👤 DADOS DO CLIENTE:', 20, 80);
+            pdf.text(`Nome: ${document.getElementById('nome').value || 'Não informado'}`, 20, 95);
+            pdf.text(`Data: ${document.getElementById('data').value || 'Não informado'}`, 20, 110);
+            pdf.text(`Endereço: ${document.getElementById('endereco').value || 'Não informado'}`, 20, 125);
+            pdf.text(`E-mail: ${document.getElementById('email').value || 'Não informado'}`, 20, 140);
+            pdf.text(`Telefone: ${document.getElementById('telefone').value || 'Não informado'}`, 20, 155);
+            pdf.text(`Observações: ${document.getElementById('obs').value || 'Não informado'}`, 20, 170);
 
-            // Dados do Cliente
-            pdf.setFontSize(22);
-            pdf.text("📋 DADOS DO CLIENTE", 20, 100);
-            pdf.setFontSize(20);
-            const nome = document.getElementById('nome').value || "Não informado";
-            const data = document.getElementById('data').value || "Não informado";
-            const endereco = document.getElementById('endereco').value || "Não informado";
-            const email = document.getElementById('email').value || "Não informado";
-            const telefone = document.getElementById('telefone').value || "Não informado";
-            const obs = document.getElementById('obs').value || "Não informado";
+            // VALOR DO ORÇAMENTO NO PDF
+            pdf.setFontSize(16);
+            pdf.text('💲 VALOR DO ORÇAMENTO:', 20, 200);
+            pdf.text(document.getElementById('valor-final').textContent, 20, 215);
 
-            pdf.text(`Nome: ${nome}`, 20, 120);
-            pdf.text(`Data: ${data}`, 20, 140);
-            pdf.text(`Endereço: ${endereco}`, 20, 160);
-            pdf.text(`E-mail: ${email}`, 20, 180);
-            pdf.text(`Telefone: ${telefone}`, 20, 200);
+            // MENSAGEM DE CONTATO
+            pdf.setFontSize(14);
+            pdf.text('📞 Contato: WhatsApp (55)31990729916', 20, 240);
 
-            // Resultados
-            pdf.setFontSize(22);
-            pdf.text("📊 RESULTADOS DOS CÁLCULOS", 20, 230);
-            pdf.setFontSize(20);
-            const servico = document.getElementById('servico').value;
-            const med1 = document.getElementById('medida1').value;
-            const med2 = document.getElementById('medida2').value;
-            const med3 = document.getElementById('medida3').value;
-            const resultado = document.getElementById('resultado-site').textContent;
-
-            pdf.text(`Serviço: ${servico.toUpperCase()}`, 20, 250);
-            let medidaTxt = `Medidas: ${med1}m X ${med2}m`;
-            if(servico === 'concreto') medidaTxt += ` X ${med3}m`;
-            pdf.text(medidaTxt, 20, 270);
-            pdf.text(resultado.trim(), 20, 290);
-
-            // Observações
-            pdf.setFontSize(22);
-            pdf.text("💡 OBSERVAÇÕES", 20, 350);
-            pdf.setFontSize(20);
-            pdf.text(obs, 20, 370);
-
-            // Contato
-            pdf.setFontSize(20);
-            pdf.text("📞 Se gostar, entre em contato pelo WhatsApp: (55)31990721928", 20, 420);
-
-            // Salva o PDF
-            pdf.save(`Orçamento_${nome.replace(/\s/g, '_')}.pdf`);
+            // SALVA NA PASTA DOCUMENTOS (o navegador direciona para lá por padrão)
+            const nomeCliente = document.getElementById('nome').value || 'Orçamento';
+            pdf.save(`${nomeCliente}_Orçamento.pdf`);
+            
+            alert('✅ PDF SALVO COM SUCESSO! Verifique a pasta DOCUMENTOS do seu celular!');
         }
 
-        // Função limpar
-        function limpar() {
-            document.querySelectorAll('input, select, textarea').forEach(el => el.value = '');
-            document.getElementById('resultado-site').style.display = 'none';
+        // FUNÇÃO PARA LIMPAR O FORMULÁRIO
+        function limparFormulario() {
+            document.querySelectorAll('input, select, textarea').forEach(campo => campo.value = '');
+            document.getElementById('valor-destaque').style.display = 'none';
             document.getElementById('medida3').style.display = 'none';
+            document.getElementById('label-medida3').style.display = 'none';
         }
     </script>
 </body>
