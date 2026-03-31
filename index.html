@@ -41,19 +41,17 @@
             object-fit: cover;
         }
 
-        .app-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
         .app-header h1 {
             color: #2d5d2a;
-            font-size: 28px;
+            text-align: center;
             margin-bottom: 10px;
+            font-size: 28px;
         }
 
         .app-header p {
             color: #666;
+            text-align: center;
+            margin-bottom: 40px;
             font-size: 16px;
         }
 
@@ -61,37 +59,45 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
         }
 
         .service-card {
-            background-color: #f8f9fa;
             border: 2px solid #2d5d2a;
             border-radius: 12px;
             padding: 20px;
             text-align: center;
             cursor: pointer;
-            font-size: 18px;
-            color: #333;
             transition: all 0.3s ease;
+            background-color: white;
+            color: #333;
         }
 
         .service-card:hover {
             background-color: #2d5d2a;
             color: white;
-            transform: translateY(-5px);
+        }
+
+        .service-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
         }
 
         .service-card p {
             font-size: 14px;
-            margin-top: 10px;
         }
 
         .calculator-section {
+            display: none;
             margin-top: 30px;
             padding-top: 30px;
             border-top: 1px solid #eee;
-            display: none;
+        }
+
+        .calculator-section h2 {
+            color: #2d5d2a;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .input-group {
@@ -101,8 +107,8 @@
         .input-group label {
             display: block;
             margin-bottom: 8px;
-            font-size: 16px;
             color: #333;
+            font-size: 16px;
         }
 
         .input-group input {
@@ -113,15 +119,6 @@
             font-size: 16px;
         }
 
-        .result-box {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            white-space: pre-line;
-            border: 1px solid #2d5d2a;
-        }
-
         .btn {
             width: 100%;
             padding: 15px;
@@ -129,8 +126,8 @@
             border-radius: 8px;
             font-size: 18px;
             cursor: pointer;
-            margin-bottom: 10px;
             transition: background 0.3s ease;
+            margin-bottom: 10px;
         }
 
         .btn-primary {
@@ -151,13 +148,22 @@
             background-color: #545b62;
         }
 
+        .result-box {
+            background-color: #f8f9fa;
+            border: 1px solid #2d5d2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            white-space: pre-line;
+        }
+
         .observations-list {
             background-color: #f8f9fa;
-            padding: 15px;
+            border: 1px solid #ddd;
             border-radius: 8px;
+            padding: 15px;
             margin: 10px 0;
             white-space: pre-line;
-            border: 1px solid #ddd;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -200,7 +206,7 @@
         </div>
 
         <div id="calculator-section" class="calculator-section">
-            <h2 id="service-title" style="color: #2d5d2a; margin-bottom: 20px; text-align: center;"></h2>
+            <h2 id="service-title"></h2>
             <div class="input-group">
                 <label for="measure1">Medida 1 (m):</label>
                 <input type="number" id="measure1" placeholder="Ex: 5.20" step="0.01">
@@ -226,13 +232,13 @@
                 <input type="text" id="client-address" placeholder="Endereço completo">
             </div>
             <div class="input-group">
-                <label for="client-date">Data do Orçamento:</label>
+                <label for="client-date">Data:</label>
                 <input type="date" id="client-date">
             </div>
 
             <div class="input-group">
                 <label for="observation">Observação:</label>
-                <input type="text" id="observation" placeholder="Digite uma observação ou 'apagar' para remover última">
+                <input type="text" id="observation" placeholder="Digite uma observação ou 'apagar'">
                 <button class="btn btn-secondary" id="add-obs-btn" style="margin-top: 10px;">ADICIONAR</button>
             </div>
             <div class="observations-list" id="observations-list">Nenhuma observação adicionada.</div>
@@ -243,12 +249,11 @@
     </div>
 
     <script>
-        // DADOS DOS SERVIÇOS
         const services = {
             1: { name: "ALVENARIA", type: "m²", price: 52.00, hasThirdMeasure: false },
             2: { name: "REBOCO", type: "m²", price: 35.00, hasThirdMeasure: false },
-            3: { name: "ACABAMENTO (PORCELANATO)", type: "m²", price: 60.00, hasThirdMeasure: false },
-            4: { name: "ACABAMENTO (CERÂMICA)", type: "m²", price: 40.00, hasThirdMeasure: false },
+            3: { name: "PORCELANATO", type: "m²", price: 60.00, hasThirdMeasure: false },
+            4: { name: "CERÂMICA", type: "m²", price: 40.00, hasThirdMeasure: false },
             5: { name: "CONCRETO", type: "m³", price: 150.00, hasThirdMeasure: true },
             6: { name: "GESSO", type: "m²", price: 20.00, hasThirdMeasure: false }
         };
@@ -256,8 +261,8 @@
         let currentService = null;
         let observations = [];
 
-        // SELECIONA TODOS OS ELEMENTOS
         const serviceCards = document.querySelectorAll('.service-card');
+        const servicesSection = document.getElementById('services-section');
         const calculatorSection = document.getElementById('calculator-section');
         const serviceTitle = document.getElementById('service-title');
         const measure3Group = document.getElementById('measure3-group');
@@ -267,126 +272,120 @@
         const generatePdfBtn = document.getElementById('generate-pdf-btn');
         const resultBox = document.getElementById('result-box');
         const observationsList = document.getElementById('observations-list');
-        const measure1Input = document.getElementById('measure1');
-        const measure2Input = document.getElementById('measure2');
-        const measure3Input = document.getElementById('measure3');
-        const clientNameInput = document.getElementById('client-name');
-        const clientAddressInput = document.getElementById('client-address');
-        const clientDateInput = document.getElementById('client-date');
-        const observationInput = document.getElementById('observation');
+        const measure1 = document.getElementById('measure1');
+        const measure2 = document.getElementById('measure2');
+        const measure3 = document.getElementById('measure3');
+        const clientName = document.getElementById('client-name');
+        const clientAddress = document.getElementById('client-address');
+        const clientDate = document.getElementById('client-date');
+        const observation = document.getElementById('observation');
 
-        // FUNÇÃO PARA SELECIONAR SERVIÇO
+        // SELECIONAR SERVIÇO
         serviceCards.forEach(card => {
-            card.addEventListener('click', function() {
-                const serviceId = this.dataset.service;
-                currentService = services[serviceId];
+            card.addEventListener('click', () => {
+                const id = card.dataset.service;
+                currentService = services[id];
                 serviceTitle.textContent = `${currentService.name} (${currentService.type})`;
                 measure3Group.style.display = currentService.hasThirdMeasure ? 'block' : 'none';
                 calculatorSection.style.display = 'block';
-                document.getElementById('services-section').style.display = 'none';
+                servicesSection.style.display = 'none';
             });
         });
 
-        // FUNÇÃO PARA VOLTAR
-        backBtn.addEventListener('click', function() {
+        // VOLTAR
+        backBtn.addEventListener('click', () => {
             calculatorSection.style.display = 'none';
-            document.getElementById('services-section').style.display = 'grid';
+            servicesSection.style.display = 'grid';
             observations = [];
             observationsList.textContent = 'Nenhuma observação adicionada.';
             resultBox.textContent = '';
-            measure1Input.value = '';
-            measure2Input.value = '';
-            measure3Input.value = '';
-            clientNameInput.value = '';
-            clientAddressInput.value = '';
-            clientDateInput.value = '';
-            observationInput.value = '';
+            measure1.value = '';
+            measure2.value = '';
+            measure3.value = '';
+            clientName.value = '';
+            clientAddress.value = '';
+            clientDate.value = '';
+            observation.value = '';
         });
 
-        // FUNÇÃO PARA CALCULAR
-        calculateBtn.addEventListener('click', function() {
-            const m1 = parseFloat(measure1Input.value);
-            const m2 = parseFloat(measure2Input.value);
-
+        // CALCULAR
+        calculateBtn.addEventListener('click', () => {
+            const m1 = parseFloat(measure1.value);
+            const m2 = parseFloat(measure2.value);
             if (isNaN(m1) || m1 <= 0 || isNaN(m2) || m2 <= 0) {
-                alert('Digite apenas números maiores que zero nas medidas!');
+                alert('Digite valores válidos maiores que zero!');
                 return;
             }
 
             let m3 = 1;
             if (currentService.hasThirdMeasure) {
-                m3 = parseFloat(measure3Input.value);
+                m3 = parseFloat(measure3.value);
                 if (isNaN(m3) || m3 <= 0) {
-                    alert('Digite apenas números maiores que zero na medida 3!');
+                    alert('Digite uma medida válida maior que zero!');
                     return;
                 }
             }
 
-            const totalMeasure = m1 * m2 * m3;
-            const totalPrice = totalMeasure * currentService.price;
+            const totalArea = m1 * m2 * m3;
+            const totalPrice = totalArea * currentService.price;
 
-            resultBox.textContent = `
-📌 SERVIÇO: ${currentService.name}
+            resultBox.textContent = `📌 SERVIÇO: ${currentService.name}
 📏 TIPO: ${currentService.type}
 📐 MEDIDAS: ${m1}m x ${m2}m ${currentService.hasThirdMeasure ? `x ${m3}m` : ''}
-📊 MEDIDA TOTAL: ${totalMeasure.toFixed(2).replace('.', ',')} ${currentService.type}
-💵 VALOR UNITÁRIO: R$ ${currentService.price.toFixed(2).replace('.', ',')}
-💰 VALOR TOTAL: R$ ${totalPrice.toFixed(2).replace('.', ',')}
-            `;
+📊 TOTAL: ${totalArea.toFixed(2).replace('.', ',')} ${currentService.type}
+💵 VALOR: R$ ${totalPrice.toFixed(2).replace('.', ',')}`;
         });
 
-        // FUNÇÃO PARA ADICIONAR OBSERVAÇÃO
-        addObsBtn.addEventListener('click', function() {
-            const obsText = observationInput.value.trim();
-            if (!obsText) return;
+        // ADICIONAR OBSERVAÇÃO
+        addObsBtn.addEventListener('click', () => {
+            const txt = observation.value.trim();
+            if (!txt) return;
 
-            if (obsText.toLowerCase() === 'apagar') {
+            if (txt.toLowerCase() === 'apagar') {
                 if (observations.length > 0) {
                     observations.pop();
-                    alert('Última observação removida!');
+                    alert('Observação removida!');
                 } else {
                     alert('Nenhuma observação para apagar!');
                 }
             } else {
-                observations.push(obsText);
+                observations.push(txt);
                 alert('Observação adicionada!');
             }
 
-            updateObservations();
-            observationInput.value = '';
+            observationsList.textContent = observations.length > 0 ? observations.map((obs, i) => `${i+1} - ${obs}`).join('\n') : 'Nenhuma observação adicionada.';
+            observation.value = '';
         });
 
-        function updateObservations() {
-            if (observations.length === 0) {
-                observationsList.textContent = 'Nenhuma observação adicionada.';
-            } else {
-                observationsList.textContent = observations.map((obs, i) => `${i+1} - ${obs}`).join('\n');
-            }
-        }
-
-        // FUNÇÃO PARA GERAR PDF
-        generatePdfBtn.addEventListener('click', function() {
-            const result = resultBox.textContent;
-            if (!result) {
+        // GERAR PDF
+        generatePdfBtn.addEventListener('click', () => {
+            if (!resultBox.textContent) {
                 alert('Calcule o orçamento primeiro!');
                 return;
             }
 
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF();
+            const data = clientDate.value || new Date().toLocaleDateString('pt-BR');
+            const nome = clientName.value || 'Não informado';
+            const endereco = clientAddress.value || 'Não informado';
 
             pdf.setFontSize(16);
             pdf.text('William Empreiteiro - Orçamento', 105, 15, { align: 'center' });
             pdf.line(10, 20, 200, 20);
 
             pdf.setFontSize(12);
-            pdf.text('DADOS DO ORÇAMENTO', 10, 35);
-            pdf.text(result.replace(/\n/g, '\n'), 10, 50);
+            pdf.text(`Data: ${data}`, 10, 35);
+            pdf.text(`Cliente: ${nome}`, 10, 45);
+            pdf.text(`Endereço: ${endereco}`, 10, 55);
+            pdf.text('\n' + resultBox.textContent, 10, 70);
 
             pdf.addPage();
-            pdf.text('DADOS DO CLIENTE', 10, 35);
-            const name = clientNameInput.value || 'Não informado';
-            const address = clientAddressInput.value || 'Não informado';
-            const date = clientDateInput.value || new Date().toLocaleDateString('pt-BR');
-            pdf.text(`Nome: ${name}`, 10, 50);
-            pdf.text(`Endereço: ${address}`, 10, 6
+            pdf.text('OBSERVAÇÕES', 10, 35);
+            pdf.text(observationsList.textContent, 10, 50);
+
+            pdf.save(`Orçamento_${currentService.name}_${data.replace(/\//g, '-')}.pdf`);
+        });
+    </script>
+</body>
+</html>
