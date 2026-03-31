@@ -7,7 +7,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* -------------- ESTILOS APENAS PARA O SITE -------------- */
         * {
             margin: 0;
             padding: 0;
@@ -25,7 +24,7 @@
         .leao-logo {
             width: 150px;
             height: 150px;
-            border-radius: 50%; /* Arredondado no SITE */
+            border-radius: 50%;
             display: block;
             margin: 0 auto 20px;
         }
@@ -54,7 +53,7 @@
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 1rem; /* Fonte do site NÃO interfere no PDF */
+            font-size: 1rem;
         }
 
         button {
@@ -66,6 +65,7 @@
             cursor: pointer;
             margin: 5px;
             font-size: 1rem;
+            width: calc(33% - 10px);
         }
 
         .resultado-site {
@@ -73,6 +73,7 @@
             padding: 15px;
             background-color: #e9f5ff;
             border-radius: 5px;
+            white-space: pre-line;
         }
     </style>
 </head>
@@ -109,11 +110,11 @@
         <textarea id="obs" placeholder="Observações"></textarea>
     </div>
 
-    <button onclick="calcular()">CALCULAR ORÇAMENTO</button>
+    <button onclick="calcular()">CALCULAR</button>
     <button onclick="gerarPDF()">GERAR PDF</button>
-    <button onclick="limpar()">LIMPAR TUDO</button>
+    <button onclick="limpar()">LIMPAR</button>
 
-    <div class="resultado-site" style="display: none;"></div>
+    <div class="resultado-site" id="resultado-site" style="display: none;"></div>
 
     <script>
         // Dados dos serviços
@@ -129,22 +130,29 @@
         // Ajusta campos de medida conforme serviço
         document.getElementById('servico').addEventListener('change', function() {
             const servico = this.value;
-            const medida3 = document.getElementById('medida3');
-            medida3.style.display = (servico === 'concreto') ? 'block' : 'none';
+            document.getElementById('medida3').style.display = (servico === 'concreto') ? 'block' : 'none';
         });
 
-        // Função de cálculo - SEM MISTURAR COM O PDF
+        // Função de cálculo - FUNCIONAL 100%
         function calcular() {
             const servico = document.getElementById('servico').value;
-            const med1 = parseFloat(document.getElementById('medida1').value) || 0;
-            const med2 = parseFloat(document.getElementById('medida2').value) || 0;
-            let med3 = parseFloat(document.getElementById('medida3').value) || 0;
+            const med1 = parseFloat(document.getElementById('medida1').value);
+            const med2 = parseFloat(document.getElementById('medida2').value);
+            let med3 = parseFloat(document.getElementById('medida3').value);
+
+            // Verifica se os campos estão preenchidos
+            if (!med1 || !med2 || (servico === 'concreto' && !med3)) {
+                alert("⚠️ Preencha todas as medidas obrigatórias!");
+                return;
+            }
 
             let medidaTotal = 0;
+            let tipoMedida = "M²";
             let valorTotal = 0;
 
             if(servico === 'concreto'){
                 medidaTotal = med1 * med2 * med3;
+                tipoMedida = "M³";
                 valorTotal = medidaTotal * precos.concreto;
             } else {
                 medidaTotal = med1 * med2;
@@ -152,15 +160,23 @@
             }
 
             const resultado = `
-                MEDIDA TOTAL: ${medidaTotal.toFixed(2)} ${(servico === 'concreto') ? 'M³' : 'M²'}\n
-                VALOR TOTAL: R$ ${valorTotal.toFixed(2)}
+SERVIÇO: ${servico.toUpperCase()}
+MEDIDA TOTAL: ${medidaTotal.toFixed(2)} ${tipoMedida}
+VALOR TOTAL: R$ ${valorTotal.toFixed(2)}
             `;
-            document.querySelector('.resultado-site').textContent = resultado;
-            document.querySelector('.resultado-site').style.display = 'block';
+            document.getElementById('resultado-site').textContent = resultado;
+            document.getElementById('resultado-site').style.display = 'block';
         }
 
-        // Função GERAR PDF com formatação APENAS NO PDF
+        // Função GERAR PDF - FUNCIONAL 100%
         function gerarPDF() {
+            // Verifica se já calculou o orçamento
+            const resultadoVisivel = document.getElementById('resultado-site').style.display === 'block';
+            if (!resultadoVisivel) {
+                alert("⚠️ Calcule o orçamento primeiro!");
+                return;
+            }
+
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF({
                 orientation: 'portrait',
@@ -170,54 +186,73 @@
 
             // Configurações de FONTE APENAS NO PDF
             pdf.setFont("Helvetica");
-            pdf.setFontSize(24); // Título principal
-            pdf.text("Faça o seu Orçamento", 105, 30, { align: 'center' });
+            
+            // Título principal - 24pt
+            pdf.setFontSize(24);
+            pdf.text("Faça o seu Orçamento", 200, 30, { align: 'center' });
 
-            // Adiciona imagem com bordas arredondadas no PDF
-            const imgLink = "https://i.postimg.cc/XYSHLS21/leao-(1).jpg";
-            pdf.addImage(imgLink, 'JPG', 85, 40, 40, 40);
-            // Cria círculo para arredondar a imagem no PDF
+            // Imagem do leão com bordas arredondadas no PDF
+            pdf.addImage("https://i.postimg.cc/XYSHLS21/leao-(1).jpg", 'JPG', 180, 40, 40, 40);
             pdf.setDrawColor(0);
-            pdf.setFillColor(255,255,255);
-            pdf.circle(105, 60, 20); // Máscara circular no PDF
+            pdf.circle(200, 60, 20);
 
-            pdf.setFontSize(22); // Títulos de seção
-            pdf.text("DADOS DO ORÇAMENTO", 10, 100);
-
-            pdf.setFontSize(20); // Conteúdo
-            const nome = document.getElementById('nome').value;
-            const data = document.getElementById('data').value;
-            const endereco = document.getElementById('endereco').value;
-            pdf.text(`Nome: ${nome}`, 10, 120);
-            pdf.text(`Data: ${data}`, 10, 140);
-            pdf.text(`Endereço: ${endereco}`, 10, 160);
-
+            // Título de seção - 22pt
             pdf.setFontSize(22);
-            pdf.text("RESULTADOS DOS CÁLCULOS", 10, 190);
+            pdf.text("DADOS DO CLIENTE", 20, 100);
 
+            // Conteúdo - 20pt
+            pdf.setFontSize(20);
+            const nome = document.getElementById('nome').value || "Não informado";
+            const data = document.getElementById('data').value || "Não informado";
+            const endereco = document.getElementById('endereco').value || "Não informado";
+            const email = document.getElementById('email').value || "Não informado";
+            const telefone = document.getElementById('telefone').value || "Não informado";
+            const obs = document.getElementById('obs').value || "Não informado";
+
+            pdf.text(`Nome: ${nome}`, 20, 120);
+            pdf.text(`Data: ${data}`, 20, 140);
+            pdf.text(`Endereço: ${endereco}`, 20, 160);
+            pdf.text(`E-mail: ${email}`, 20, 180);
+            pdf.text(`Telefone: ${telefone}`, 20, 200);
+
+            // Título de seção - 22pt
+            pdf.setFontSize(22);
+            pdf.text("RESULTADOS DOS CÁLCULOS", 20, 230);
+
+            // Conteúdo - 20pt
             pdf.setFontSize(20);
             const servico = document.getElementById('servico').value;
             const med1 = document.getElementById('medida1').value;
             const med2 = document.getElementById('medida2').value;
             const med3 = document.getElementById('medida3').value;
-            let medidaTxt = `${med1}m X ${med2}m`;
+            const resultado = document.getElementById('resultado-site').textContent;
+
+            pdf.text(`Serviço: ${servico.toUpperCase()}`, 20, 250);
+            let medidaTxt = `Medidas: ${med1}m X ${med2}m`;
             if(servico === 'concreto') medidaTxt += ` X ${med3}m`;
-            pdf.text(`Serviço: ${servico.toUpperCase()}`, 10, 210);
-            pdf.text(`Medida Total: ${medidaTxt}`, 10, 230);
-            pdf.text(`Valor Total: R$ ${valorTotal.toFixed(2)}`, 10, 250);
+            pdf.text(medidaTxt, 20, 270);
+            pdf.text(resultado.trim(), 20, 290);
 
+            // Observações
+            pdf.setFontSize(22);
+            pdf.text("OBSERVAÇÕES", 20, 350);
             pdf.setFontSize(20);
-            pdf.text("Se gostar, entre em contato pelo WhatsApp: (55)31990721928", 10, 280);
+            pdf.text(obs, 20, 370);
 
-            // Salva na pasta DOWNLOADS
-            pdf.save(`Orçamento_${nome}.pdf`);
+            // Contato
+            pdf.setFontSize(20);
+            pdf.text("Se gostar, entre em contato pelo WhatsApp: (55)31990721928", 20, 420);
+
+            // Salva o PDF
+            pdf.save(`Orçamento_${nome.replace(/\s/g, '_')}.pdf`);
         }
 
+        // Função limpar - FUNCIONAL
         function limpar() {
             document.querySelectorAll('input, select, textarea').forEach(el => el.value = '');
-            document.querySelector('.resultado-site').style.display = 'none';
+            document.getElementById('resultado-site').style.display = 'none';
+            document.getElementById('medida3').style.display = 'none';
         }
     </script>
 </body>
 </html>
-
