@@ -267,6 +267,13 @@
         const generatePdfBtn = document.getElementById('generate-pdf-btn');
         const resultBox = document.getElementById('result-box');
         const observationsList = document.getElementById('observations-list');
+        const measure1Input = document.getElementById('measure1');
+        const measure2Input = document.getElementById('measure2');
+        const measure3Input = document.getElementById('measure3');
+        const clientNameInput = document.getElementById('client-name');
+        const clientAddressInput = document.getElementById('client-address');
+        const clientDateInput = document.getElementById('client-date');
+        const observationInput = document.getElementById('observation');
 
         // FUNÇÃO PARA SELECIONAR SERVIÇO
         serviceCards.forEach(card => {
@@ -287,19 +294,19 @@
             observations = [];
             observationsList.textContent = 'Nenhuma observação adicionada.';
             resultBox.textContent = '';
-            document.getElementById('measure1').value = '';
-            document.getElementById('measure2').value = '';
-            document.getElementById('measure3').value = '';
-            document.getElementById('client-name').value = '';
-            document.getElementById('client-address').value = '';
-            document.getElementById('client-date').value = '';
-            document.getElementById('observation').value = '';
+            measure1Input.value = '';
+            measure2Input.value = '';
+            measure3Input.value = '';
+            clientNameInput.value = '';
+            clientAddressInput.value = '';
+            clientDateInput.value = '';
+            observationInput.value = '';
         });
 
         // FUNÇÃO PARA CALCULAR
         calculateBtn.addEventListener('click', function() {
-            const m1 = parseFloat(document.getElementById('measure1').value);
-            const m2 = parseFloat(document.getElementById('measure2').value);
+            const m1 = parseFloat(measure1Input.value);
+            const m2 = parseFloat(measure2Input.value);
 
             if (isNaN(m1) || m1 <= 0 || isNaN(m2) || m2 <= 0) {
                 alert('Digite apenas números maiores que zero nas medidas!');
@@ -308,7 +315,7 @@
 
             let m3 = 1;
             if (currentService.hasThirdMeasure) {
-                m3 = parseFloat(document.getElementById('measure3').value);
+                m3 = parseFloat(measure3Input.value);
                 if (isNaN(m3) || m3 <= 0) {
                     alert('Digite apenas números maiores que zero na medida 3!');
                     return;
@@ -330,7 +337,7 @@
 
         // FUNÇÃO PARA ADICIONAR OBSERVAÇÃO
         addObsBtn.addEventListener('click', function() {
-            const obsText = document.getElementById('observation').value.trim();
+            const obsText = observationInput.value.trim();
             if (!obsText) return;
 
             if (obsText.toLowerCase() === 'apagar') {
@@ -346,7 +353,7 @@
             }
 
             updateObservations();
-            document.getElementById('observation').value = '';
+            observationInput.value = '';
         });
 
         function updateObservations() {
@@ -378,15 +385,8 @@
 
             pdf.addPage();
             pdf.text('DADOS DO CLIENTE', 10, 35);
-            const name = document.getElementById('client-name').value || 'Não informado';
-            const address = document.getElementById('client-address').value || 'Não informado';
-            const date = document.getElementById('client-date').value || new Date().toLocaleDateString('pt-BR');
+            const name = clientNameInput.value || 'Não informado';
+            const address = clientAddressInput.value || 'Não informado';
+            const date = clientDateInput.value || new Date().toLocaleDateString('pt-BR');
             pdf.text(`Nome: ${name}`, 10, 50);
-            pdf.text(`Endereço: ${address}`, 10, 60);
-            pdf.text(`Data: ${date}`, 10, 70);
-
-            pdf.text('OBSERVAÇÕES', 10, 85);
-            const obsText = observations.length > 0 ? observations.join('\n') : 'Nenhuma observação adicionada.';
-            pdf.text(obsText, 10, 100);
-
-            pdf.save(`Orçamento_${currentService.name}_${new Date().
+            pdf.text(`Endereço: ${address}`, 10, 6
