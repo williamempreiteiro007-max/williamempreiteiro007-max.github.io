@@ -1,1 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faça o seu Orçamento</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* -------------- ESTILOS APENAS PARA O SITE -------------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .leao-logo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%; /* Arredondado no SITE */
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem; /* Fonte do site NÃO interfere no PDF */
+        }
+
+        button {
+            background-color: #FF8C00;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 1rem;
+        }
+
+        .resultado-site {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f5ff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://i.postimg.cc/XYSHLS21/leao-(1).jpg" alt="Logo Leão" class="leao-logo">
+    <h1>Faça o seu Orçamento</h1>
+    
+    <div class="form-group">
+        <label>1. ESCOLHA O SERVIÇO:</label>
+        <select id="servico">
+            <option value="alvenaria">ALVENARIA (M²) - R$52,00</option>
+            <option value="reboco">REBOCO (M²) - R$35,00</option>
+            <option value="porcelanato">PORCELANATO (M²) - R$60,00</option>
+            <option value="ceramica">CERÂMICA (M²) - R$40,00</option>
+            <option value="concreto">CONCRETO (M³) - R$150,00</option>
+            <option value="gesso">GESSO (M²) - R$20,00</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>2. MEDIDAS (em metros):</label>
+        <input type="number" id="medida1" placeholder="Horizontal (m)" step="0.01" min="0">
+        <input type="number" id="medida2" placeholder="Vertical (m)" step="0.01" min="0">
+        <input type="number" id="medida3" placeholder="Profundidade (apenas para M³)" step="0.01" min="0" style="display: none;">
+    </div>
+
+    <div class="form-group">
+        <label>3. DADOS DO CLIENTE:</label>
+        <input type="text" id="nome" placeholder="Nome completo">
+        <input type="date" id="data">
+        <input type="text" id="endereco" placeholder="Endereço da obra">
+        <input type="email" id="email" placeholder="E-mail (opcional)">
+        <input type="text" id="telefone" placeholder="Telefone (opcional)">
+        <textarea id="obs" placeholder="Observações"></textarea>
+    </div>
+
+    <button onclick="calcular()">CALCULAR ORÇAMENTO</button>
+    <button onclick="gerarPDF()">GERAR PDF</button>
+    <button onclick="limpar()">LIMPAR TUDO</button>
+
+    <div class="resultado-site" style="display: none;"></div>
+
+    <script>
+        // Dados dos serviços
+        const precos = {
+            alvenaria: 52.00,
+            reboco: 35.00,
+            porcelanato: 60.00,
+            ceramica: 40.00,
+            concreto: 150.00,
+            gesso: 20.00
+        };
+
+        // Ajusta campos de medida conforme serviço
+        document.getElementById('servico').addEventListener('change', function() {
+            const servico = this.value;
+            const medida3 = document.getElementById('medida3');
+            medida3.style.display = (servico === 'concreto') ? 'block' : 'none';
+        });
+
+        // Função de cálculo - SEM MISTURAR COM O PDF
+        function calcular() {
+            const servico = document.getElementById('servico').value;
+            const med1 = parseFloat(document.getElementById('medida1').value) || 0;
+            const med2 = parseFloat(document.getElementById('medida2').value) || 0;
+            let med3 = parseFloat(document.getElementById('medida3').value) || 0;
+
+            let medidaTotal = 0;
+            let valorTotal = 0;
+
+            if(servico === 'concreto'){
+                medidaTotal = med1 * med2 * med3;
+                valorTotal = medidaTotal * precos.concreto;
+            } else {
+                medidaTotal = med1 * med2;
+                valorTotal = medidaTotal * precos[servico];
+            }
+
+            const resultado = `
+                MEDIDA TOTAL: ${medidaTotal.toFixed(2)} ${(servico === 'concreto') ? 'M³' : 'M²'}\n
+                VALOR TOTAL: R$ ${valorTotal.toFixed(2)}
+            `;
+            document.querySelector('.resultado-site').textContent = resultado;
+            document.querySelector('.resultado-site').style.display = 'block';
+        }
+
+        // Função GERAR PDF com formatação APENAS NO PDF
+        function gerarPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'pt',
+                format: 'a4'
+            });
+
+            // Configurações de FONTE APENAS NO PDF
+            pdf.setFont("Helvetica");
+            pdf.setFontSize(24); // Título principal
+            pdf.text("Faça o seu Orçamento", 105, 30, { align: 'center' });
+
+            // Adiciona imagem com bordas arredondadas no PDF
+            const imgLink = "https://i.postimg.cc/XYSHLS21/leao-(1).jpg";
+            pdf.addImage(imgLink, 'JPG', 85, 40, 40, 40);
+            // Cria círculo para arredondar a imagem no PDF
+            pdf.setDrawColor(0);
+            pdf.setFillColor(255,255,255);
+            pdf.circle(105, 60, 20); // Máscara circular no PDF
+
+            pdf.setFontSize(22); // Títulos de seção
+            pdf.text("DADOS DO ORÇAMENTO", 10, 100);
+
+            pdf.setFontSize(20); // Conteúdo
+            const nome = document.getElementById('nome').value;
+            const data = document.getElementById('data').value;
+            const endereco = document.getElementById('endereco').value;
+            pdf.text(`Nome: ${nome}`, 10, 120);
+            pdf.text(`Data: ${data}`, 10, 140);
+            pdf.text(`Endereço: ${endereco}`, 10, 160);
+
+            pdf.setFontSize(22);
+            pdf.text("RESULTADOS DOS CÁLCULOS", 10, 190);
+
+            pdf.setFontSize(20);
+            const servico = document.getElementById('servico').value;
+            const med1 = document.getElementById('medida1').value;
+            const med2 = document.getElementById('medida2').value;
+            const med3 = document.getElementById('medida3').value;
+            let medidaTxt = `${med1}m X ${med2}m`;
+            if(servico === 'concreto') medidaTxt += ` X ${med3}m`;
+            pdf.text(`Serviço: ${servico.toUpperCase()}`, 10, 210);
+            pdf.text(`Medida Total: ${medidaTxt}`, 10, 230);
+            pdf.text(`Valor Total: R$ ${valorTotal.toFixed(2)}`, 10, 250);
+
+            pdf.setFontSize(20);
+            pdf.text("Se gostar, entre em contato pelo WhatsApp: (55)31990721928", 10, 280);
+
+            // Salva na pasta DOWNLOADS
+            pdf.save(`Orçamento_${nome}.pdf`);
+        }
+
+        function limpar() {
+            document.querySelectorAll('input, select, textarea').forEach(el => el.value = '');
+            document.querySelector('.resultado-site').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
 
