@@ -304,3 +304,247 @@
     </script>
 </body>
 </html>
+        <!-- Tela de Resultados e Dados do Cliente -->
+        <div id="tela-resultados" class="tela oculta">
+            <h2>📊 RESULTADO DO CÁLCULO</h2>
+            <p><strong>Serviço: </strong><span id="res-servico"></span></p>
+            <p><strong>Medida Total: </strong><span id="res-medida"></span></p>
+            <p><strong>Valor Total: </strong>R$ <span id="res-valor"></span></p>
+            <div id="res-detalhes" class="detalhes-box"></div>
+
+            <div class="opcao-alterar">
+                <p>✏️ DESEJA ALTERAR O VALOR TOTAL?</p>
+                <button onclick="mostrarCampoAlteracao()">SIM</button>
+                <button onclick="ocultarCampoAlteracao()">NÃO</button>
+                <div id="campo-alteracao" class="oculta">
+                    <input type="text" id="novo-valor" placeholder="Digite o novo valor (ex: 1500,00)">
+                    <button onclick="alterarValorTotal()">ATUALIZAR VALOR</button>
+                </div>
+            </div>
+
+            <div class="dados-cliente">
+                <h3>👤 DADOS DO CLIENTE</h3>
+                <input type="text" id="nome-cliente" placeholder="NOME COMPLETO">
+                <input type="date" id="data-orcamento">
+                <input type="text" id="endereco-obra" placeholder="ENDEREÇO DA OBRA">
+                <input type="email" id="email-cliente" placeholder="E-MAIL (OPCIONAL)">
+                <input type="tel" id="telefone-cliente" placeholder="TELEFONE (OPCIONAL)">
+
+                <h3>📝 OBSERVAÇÕES</h3>
+                <textarea id="observacoes" rows="4" placeholder="Digite suas observações aqui..."></textarea>
+            </div>
+
+            <div class="opcao-salvar">
+                <p>💾 INCLUIR CÁLCULOS NO PDF?</p>
+                <button onclick="gerarPDF(true)">SIM - GERAR PDF</button>
+                <button onclick="gerarPDF(false)">NÃO - GERAR PDF</button>
+            </div>
+            <button onclick="irParaTela('tela-inicial')">VOLTAR AO INÍCIO</button>
+        </div>
+    </div>
+
+    <script>
+        // Lista de serviços com dados fixos
+        const servicos = {
+            1: {"nome": "ALVENARIA", "tipo": "M²", "valor": 52.00, "desc": "Apenas mão de obra para alvenaria"},
+            2: {"nome": "REBOCO", "tipo": "M²", "valor": 35.00, "desc": "Apenas mão de obra para reboco de paredes"},
+            3: {"nome": "ACABAMENTO (PORCELANATO)", "tipo": "M²", "valor": 60.00, "desc": "Apenas mão de obra para assentamento"},
+            4: {"nome": "ACABAMENTO (CERÂMICA)", "tipo": "M²", "valor": 40.00, "desc": "Apenas mão de obra para assentamento"},
+            5: {"nome": "CONCRETO", "tipo": "M³", "valor": 150.00, "desc": "Apenas mão de obra para estruturas"},
+            6: {"nome": "GESSO", "tipo": "M²", "valor": 20.00, "desc": "Apenas mão de obra - valor fixo"}
+        };
+
+        let dadosCalculo = {};
+
+        // Função para alternar telas
+        function irParaTela(idTela) {
+            document.querySelectorAll('.tela').forEach(tela => tela.classList.add('oculta'));
+            document.getElementById(idTela).classList.remove('oculta');
+        }
+
+        // Função para selecionar serviço (chamada sem aspas, só número)
+        function selecionarServico(id) {
+            const servico = servicos[id];
+            dadosCalculo.servico = servico;
+
+            // Atualizar textos da tela de cálculos
+            document.getElementById('titulo-servico').textContent = `📌 ${servico.nome} | ${servico.tipo}`;
+            document.getElementById('desc-servico').textContent = servico.desc;
+            document.getElementById('valor-metro').textContent = formatarNumero(servico.valor);
+
+            // Criar campos de medida conforme tipo do serviço
+            const camposMedidas = document.getElementById('campos-medidas');
+            camposMedidas.innerHTML = `<p><strong>📏 INSIRA AS MEDIDAS EM METROS:</strong></p>`;
+            
+            if (servico.tipo === "M²") {
+                camposMedidas.innerHTML += `
+                    <input type="number" step="0.01" id="horizontal" placeholder="HORIZONTAL (m)" required>
+                    <input type="number" step="0.01" id="vertical" placeholder="VERTICAL (m)" required>
+                `;
+            } else {
+                camposMedidas.innerHTML += `
+                    <input type="number" step="0.01" id="horizontal" placeholder="HORIZONTAL (m)" required>
+                    <input type="number" step="0.01" id="vertical" placeholder="VERTICAL (m)" required>
+                    <input type="number" step="0.01" id="profundidade" placeholder="PROFUNDIDADE (m)" required>
+                `;
+            }
+
+            // Ir para tela de cálculos
+            irParaTela('tela-calculos');
+        }
+
+        // Função para formatar números no padrão BR
+        function formatarNumero(num) {
+            if (isNaN(num)) return num;
+            const numero = parseFloat(num);
+            return numero.toLocaleString('pt-BR', {
+                minimumFractionDigits: numero.isInteger() ? 0 : 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // Função para validar números
+        function validarNumero(valor) {
+            const num = parseFloat(valor.replace(',', '.'));
+            return isNaN(num) ? 0 : num;
+        }
+
+        // Função para calcular serviço
+        function calcularServico() {
+            const servico = dadosCalculo.servico;
+            const horizontal = validarNumero(document.getElementById('horizontal').value);
+            const vertical = validarNumero(document.getElementById('vertical').value);
+            
+            let medidaTotal, valorTotal, detalhes;
+
+            if (servico.tipo === "M²") {
+                medidaTotal = horizontal * vertical;
+                valorTotal = medidaTotal * servico.valor;
+                detalhes = `
+                    FÓRMULA: HORIZONTAL X VERTICAL<br>
+                    Medidas: ${formatarNumero(horizontal)}m X ${formatarNumero(vertical)}m = ${formatarNumero(medidaTotal)}${servico.tipo}<br>
+                    Valor por ${servico.tipo}: R$ ${formatarNumero(servico.valor)}<br>
+                    VALOR TOTAL: R$ ${formatarNumero(valorTotal)}
+                `;
+            } else {
+                const profundidade = validarNumero(document.getElementById('profundidade').value);
+                medidaTotal = horizontal * vertical * profundidade;
+                valorTotal = medidaTotal * servico.valor;
+                detalhes = `
+                    FÓRMULA: HORIZONTAL X VERTICAL X PROFUNDIDADE<br>
+                    Medidas: ${formatarNumero(horizontal)}m X ${formatarNumero(vertical)}m X ${formatarNumero(profundidade)}m = ${formatarNumero(medidaTotal)}${servico.tipo}<br>
+                    Valor por ${servico.tipo}: R$ ${formatarNumero(servico.valor)}<br>
+                    VALOR TOTAL: R$ ${formatarNumero(valorTotal)}
+                `;
+            }
+
+            // Armazenar dados
+            dadosCalculo.medidaTotal = medidaTotal;
+            dadosCalculo.valorTotal = valorTotal;
+            dadosCalculo.detalhes = detalhes;
+
+            // Atualizar tela de resultados
+            document.getElementById('res-servico').textContent = `${servico.nome} - ${servico.desc}`;
+            document.getElementById('res-medida').textContent = `${formatarNumero(medidaTotal)} ${servico.tipo}`;
+            document.getElementById('res-valor').textContent = formatarNumero(valorTotal);
+            document.getElementById('res-detalhes').innerHTML = detalhes;
+
+            // Ir para tela de resultados
+            irParaTela('tela-resultados');
+        }
+
+        // Funções para alterar valor total
+        function mostrarCampoAlteracao() {
+            document.getElementById('campo-alteracao').classList.remove('oculta');
+        }
+
+        function ocultarCampoAlteracao() {
+            document.getElementById('campo-alteracao').classList.add('oculta');
+        }
+
+        function alterarValorTotal() {
+            const novoValor = validarNumero(document.getElementById('novo-valor').value);
+            if (novoValor <= 0) {
+                alert("Valor inválido! Digite um número maior que zero.");
+                return;
+            }
+            dadosCalculo.valorTotal = novoValor;
+            document.getElementById('res-valor').textContent = formatarNumero(novoValor);
+            dadosCalculo.detalhes = dadosCalculo.detalhes.replace(
+                /VALOR TOTAL: R\$ .*/, 
+                `VALOR TOTAL ALTERADO: R$ ${formatarNumero(novoValor)}`
+            );
+            document.getElementById('res-detalhes').innerHTML = dadosCalculo.detalhes;
+            ocultarCampoAlteracao();
+            alert("Valor atualizado com sucesso!");
+        }
+
+        // Função para gerar PDF
+        function gerarPDF(includeCalculos) {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            // Configurações de fonte
+            const tituloPrincipal = 24;
+            const tituloSecao = 22;
+            const conteudo = 20;
+
+            // Título principal
+            pdf.setFontSize(tituloPrincipal);
+            pdf.text("William Empreiteiro - Cálculos de Obras", 105, 16, { align: 'center' });
+            pdf.setLineWidth(0.5);
+            pdf.line(10, 22, 200, 22);
+            pdf.ln(10);
+
+            // Dados do Orçamento
+            pdf.setFontSize(tituloSecao);
+            pdf.text("DADOS DO ORÇAMENTO", 10, 40);
+            pdf.setFontSize(conteudo);
+            const servico = dadosCalculo.servico;
+            pdf.text(`Serviço: ${servico.nome}`, 10, 55);
+            pdf.text(`Descrição: ${servico.desc}`, 10, 65);
+            pdf.text(`Tipo de Cálculo: ${servico.tipo}`, 10, 75);
+            pdf.text(`Valor Total: R$ ${formatarNumero(dadosCalculo.valorTotal)}`, 10, 85);
+            pdf.ln(15);
+
+            // Resultados dos Cálculos (se selecionado)
+            if (includeCalculos) {
+                pdf.setFontSize(tituloSecao);
+                pdf.text("RESULTADOS DOS CÁLCULOS", 10, pdf.getCurrentPageInfo().y + 5);
+                pdf.setFontSize(conteudo);
+                pdf.text(dadosCalculo.detalhes.replace(/<br>/g, '\n'), 10, pdf.getCurrentPageInfo().y + 15);
+                pdf.ln(15);
+                        pdf.text(dadosCalculo.detalhes.replace(/<br>/g, '\n'), 10, pdf.getCurrentPageInfo().y + 15, { lineHeightFactor: 1.2 });
+                pdf.ln(15);
+            }
+
+            // Seção: Dados do Cliente
+            pdf.setFontSize(tituloSecao);
+            pdf.text("DADOS DO CLIENTE", 10, pdf.getCurrentPageInfo().y + 5);
+            pdf.setFontSize(conteudo);
+            let textoCliente = `Nome: ${document.getElementById('nome-cliente').value || 'Não informado'}`;
+            textoCliente += `\nEndereço: ${document.getElementById('endereco-obra').value || 'Não informado'}`;
+            textoCliente += `\nE-mail: ${document.getElementById('email-cliente').value || 'Não informado'}`;
+            textoCliente += `\nTelefone: ${document.getElementById('telefone-cliente').value || 'Não informado'}`;
+            pdf.text(textoCliente, 10, pdf.getCurrentPageInfo().y + 15, { lineHeightFactor: 1.2 });
+            pdf.ln(15);
+
+            // Seção: Observações
+            pdf.setFontSize(tituloSecao);
+            pdf.text("OBSERVAÇÕES", 10, pdf.getCurrentPageInfo().y + 5);
+            pdf.setFontSize(conteudo);
+            const obs = document.getElementById('observacoes').value || 'Nenhuma observação informada.';
+            pdf.text(obs, 10, pdf.getCurrentPageInfo().y + 15, { lineHeightFactor: 1.2 });
+
+            // Salvar o PDF
+            const nomeArquivo = prompt("Digite o nome do arquivo PDF (sem .pdf):", "ORCAMENTO_" + servico.nome);
+            pdf.save(`${nomeArquivo || "ORCAMENTO"}.pdf`);
+            alert("PDF gerado com sucesso! Verifique sua pasta de downloads.");
+        }
+    </script>
+</body>
+</html>
