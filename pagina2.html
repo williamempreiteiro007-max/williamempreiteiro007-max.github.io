@@ -3,86 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>William Empreiteiro - Orçamento</title>
+    <title>William Empreiteiro - Dados do Cliente</title>
     <link rel="stylesheet" href="global.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>ORÇAMENTO - SELECIONE AS MEDIDAS</h1>
+        <h1>DADOS DO CLIENTE E PDF</h1>
 
         <div class="input-group">
-            <label for="med1">Medida 1 (m):</label>
-            <input type="number" id="med1" step="0.01" placeholder="Ex: 5.20">
+            <label for="nome">Nome do Cliente:</label>
+            <input type="text" id="nome" placeholder="Ex: João da Silva">
         </div>
 
         <div class="input-group">
-            <label for="med2">Medida 2 (m):</label>
-            <input type="number" id="med2" step="0.01" placeholder="Ex: 3.50">
+            <label for="telefone">Telefone:</label>
+            <input type="text" id="telefone" placeholder="(31) 99999-9999">
         </div>
 
-        <div class="input-group" id="med3-group" style="display: none;">
-            <label for="med3">Medida 3 (m):</label>
-            <input type="number" id="med3" step="0.01" placeholder="Ex: 0.15">
+        <div class="input-group">
+            <label for="endereco">Endereço:</label>
+            <input type="text" id="endereco" placeholder="Rua das Flores, 123">
         </div>
 
-        <button class="btn btn-primary" id="calc-btn">CALCULAR VALOR</button>
+        <div class="input-group">
+            <label for="obs">Observações:</label>
+            <input type="text" id="obs" placeholder="Digite observações">
+        </div>
 
-        <div class="result-box" id="result-box"></div>
-
-        <button class="btn btn-primary" id="next-btn">IR PARA DADOS DO CLIENTE</button>
-        <button class="btn btn-secondary" id="back-btn">VOLTAR PARA SELEÇÃO</button>
+        <button class="btn btn-primary" id="save-pdf">GERAR PDF</button>
+        <button class="btn btn-secondary" id="back-btn">VOLTAR PARA ORÇAMENTO</button>
     </div>
 
     <script src="global.js"></script>
     <script>
-        // CARREGAR DADOS DO SERVIÇO SELECIONADO
-        const serviceId = loadData('serviceId');
-        const service = SERVICES[serviceId];
-        
-        // MOSTRAR MEDIDA 3 SE FOR CONCRETO
-        if (service.type === 'm³') {
-            document.getElementById('med3-group').style.display = 'block';
-        }
-
-        // CALCULAR VALOR
-        document.getElementById('calc-btn').addEventListener('click', () => {
-            const m1 = parseFloat(document.getElementById('med1').value);
-            const m2 = parseFloat(document.getElementById('med2').value);
-            let m3 = 1;
-
-            if (service.type === 'm³') {
-                m3 = parseFloat(document.getElementById('med3').value);
-            }
-
-            if (isNaN(m1) || isNaN(m2) || (service.type === 'm³' && isNaN(m3))) {
-                alert('PREENCHA TODAS AS MEDIDAS!');
-                return;
-            }
-
-            const totalMeasure = service.type === 'm³' ? m1 * m2 * m3 : m1 * m2;
-            const totalPrice = totalMeasure * service.price;
-
-            document.getElementById('result-box').textContent = `
-MEDIDAS: ${m1}m x ${m2}m ${service.type === 'm³' ? `x ${m3}m` : ''}
-TOTAL: ${totalMeasure.toFixed(2)} ${service.type}
-VALOR TOTAL: R$ ${totalPrice.toFixed(2).replace('.', ',')}
-            `;
-
-            // SALVAR DADOS DO ORÇAMENTO
-            saveData('totalMeasure', totalMeasure);
-            saveData('totalPrice', totalPrice);
-        });
-
         // NAVEGAÇÃO
-        document.getElementById('back-btn').addEventListener('click', () => goToPage('pagina1.html'));
-        document.getElementById('next-btn').addEventListener('click', () => {
-            if (!loadData('totalPrice')) {
-                alert('CALCULE O ORÇAMENTO PRIMEIRO!');
+        document.getElementById('back-btn').addEventListener('click', () => goToPage('pagina2.html'));
+
+        // GERAR PDF
+        document.getElementById('save-pdf').addEventListener('click', () => {
+            const nome = document.getElementById('nome').value;
+            const telefone = document.getElementById('telefone').value;
+            const endereco = document.getElementById('endereco').value;
+            const obs = document.getElementById('obs').value;
+
+            if (!nome) {
+                alert('PREENCHA O NOME DO CLIENTE!');
                 return;
             }
-            goToPage('pagina3.html');
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            // DADOS DO ORÇAMENTO
+            const serviceName = loadData('serviceName');
+            const totalPrice = parseFloat(loadData('totalPrice'));
+            const totalMeasure = loadData('totalMeasure');
+            const serviceType = loadData('serviceType');
+
+            // CRIAR PDF
+            pdf.setFontSize(24);
+            pdf.text('WILLIAM EMPREITEIRO - ORÇAMENTO', 105, 20, { align: 'center' });
+            
+            pdf.setFontSize(22);
+            pdf.text('DADOS DO SERVIÇO', 105, 40, { align: 'center' });
+            
+            pdf.setFontSize(20);
+            pdf.text(`SERVIÇO: ${serviceName}`, 20, 60);
+            pdf.text(`TOTAL: ${totalMeasure} ${serviceType}`, 20, 80);
+            pdf.text(`VALOR: R$ ${totalPrice.toFixed(2).replace('.', ',')}`, 20, 100);
+
+            // DADOS DO CLIENTE
+            pdf.addPage();
+            pdf.setFontSize(22);
+            pdf.text('DADOS DO CLIENTE', 105, 20, { align: 'center' });
+            
+            pdf.setFontSize(20);
+            pdf.text(`NOME: ${nome}`, 20, 40);
+            pdf.text(`TELEFONE: ${telefone}`, 20, 60);
+            pdf.text(`ENDEREÇO: ${endereco}`, 20, 80);
+            pdf.text(`OBSERVAÇÕES: ${obs}`, 20, 100);
+
+            // SALVAR PDF
+            pdf.save(`Orçamento_${nome}.pdf`);
+            alert('PDF GERADO COM SUCESSO!');
         });
     </script>
 </body>
 </html>
-
