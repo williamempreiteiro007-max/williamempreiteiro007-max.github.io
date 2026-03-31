@@ -26,7 +26,7 @@
             box-shadow: 0 0 30px rgba(0,0,0,0.05);
         }
 
-        /* IMAGEM DO LEÃO NA TELA INICIAL */
+        /* MOLDURA REDONDA - COM TEXTO SE A IMAGEM NÃO CARREGAR */
         .lion-container {
             width: 250px;
             height: 250px;
@@ -34,6 +34,13 @@
             border-radius: 50%;
             overflow: hidden;
             border: 5px solid #2d5d2a;
+            background-color: #2d5d2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            text-align: center;
         }
 
         .lion-img {
@@ -73,6 +80,7 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 18px;
         }
 
         .service-card:hover {
@@ -82,7 +90,6 @@
         }
 
         .service-card h3 {
-            font-size: 18px;
             margin-bottom: 10px;
         }
 
@@ -164,11 +171,11 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- TELA INICIAL COM O LEÃO -->
+        <!-- TELA INICIAL -->
         <div class="app-header">
-            <!-- MOLDURA REDONDA DO LEÃO -->
             <div class="lion-container">
                 <img src="https://i.postimg.cc/XYSHLS21/leao-(1).jpg" alt="Leão" class="lion-img">
+                <span class="hidden">William Empreiteiro</span>
             </div>
             <h1>William Empreiteiro - Orçamentos</h1>
             <p>Sistema moderno para cálculo e emissão de orçamentos</p>
@@ -242,7 +249,7 @@
                 <input type="text" id="observation" placeholder="Digite uma observação ou 'apagar' para remover última">
                 <button class="btn btn-secondary" id="add-obs-btn">ADICIONAR</button>
             </div>
-            <div class="observations-list" id="observations-list"></div>
+            <div class="observations-list" id="observations-list">Nenhuma observação adicionada.</div>
 
             <!-- BOTÕES DE AÇÃO -->
             <button class="btn btn-primary" id="generate-pdf-btn">GERAR PDF</button>
@@ -264,147 +271,129 @@
         let currentService = null;
         let observations = [];
 
-        // SELECIONAR SERVIÇO
-        document.querySelectorAll('.service-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const serviceId = card.dataset.service;
-                currentService = services[serviceId];
-                document.getElementById('service-title').textContent = `${currentService.name} (${currentService.type})`;
-                document.getElementById('measure3-group').classList.toggle('hidden', !currentService.hasThirdMeasure);
-                document.getElementById('services-section').classList.add('hidden');
-                document.getElementById('calculator-section').classList.remove('hidden');
+        // VERIFICAR SE A IMAGEM CARREGOU
+        document.querySelector('.lion-img').addEventListener('error', function() {
+            this.classList.add('hidden');
+            document.querySelector('.lion-container span').classList.remove('hidden');
+        });
+
+        // EVENTOS AO CARREGAR A PÁGINA
+        document.addEventListener('DOMContentLoaded', function() {
+            // SELECIONAR SERVIÇO
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const serviceId = this.dataset.service;
+                    currentService = services[serviceId];
+                    document.getElementById('service-title').textContent = `${currentService.name} (${currentService.type})`;
+                    document.getElementById('measure3-group').classList.toggle('hidden', !currentService.hasThirdMeasure);
+                    document.getElementById('services-section').classList.add('hidden');
+                    document.getElementById('calculator-section').classList.remove('hidden');
+                });
             });
-        });
 
-        // VOLTAR PARA TELA INICIAL
-        document.getElementById('back-btn').addEventListener('click', () => {
-            document.getElementById('calculator-section').classList.add('hidden');
-            document.getElementById('services-section').classList.remove('hidden');
-            observations = [];
-            document.getElementById('observations-list').textContent = 'Nenhuma observação adicionada.';
-            document.getElementById('result-box').textContent = '';
-            document.getElementById('measure1').value = '';
-            document.getElementById('measure2').value = '';
-            document.getElementById('measure3').value = '';
-            document.getElementById('client-name').value = '';
-            document.getElementById('client-address').value = '';
-            document.getElementById('client-date').value = '';
-            document.getElementById('observation').value = '';
-        });
+            // VOLTAR PARA TELA INICIAL
+            document.getElementById('back-btn').addEventListener('click', function() {
+                document.getElementById('calculator-section').classList.add('hidden');
+                document.getElementById('services-section').classList.remove('hidden');
+                observations = [];
+                document.getElementById('observations-list').textContent = 'Nenhuma observação adicionada.';
+                document.getElementById('result-box').textContent = '';
+                document.getElementById('measure1').value = '';
+                document.getElementById('measure2').value = '';
+                document.getElementById('measure3').value = '';
+                document.getElementById('client-name').value = '';
+                document.getElementById('client-address').value = '';
+                document.getElementById('client-date').value = '';
+                document.getElementById('observation').value = '';
+            });
 
-        // VALIDAR NÚMERO
-        function validateNumber(value) {
-            if (!value) {
-                alert('Preencha o campo!');
-                return null;
-            }
-            const num = parseFloat(value.replace(',', '.'));
-            if (isNaN(num) || num <= 0) {
-                alert('Digite apenas números maiores que zero!');
-                return null;
-            }
-            return num;
-        }
-
-        // CALCULAR
-        document.getElementById('calculate-btn').addEventListener('click', () => {
-            const m1 = validateNumber(document.getElementById('measure1').value);
-            const m2 = validateNumber(document.getElementById('measure2').value);
-            if (!m1 || !m2) return;
-
-            let m3 = 1;
-            if (currentService.hasThirdMeasure) {
-                m3 = validateNumber(document.getElementById('measure3').value);
-                if (!m3) return;
+            // VALIDAR NÚMERO
+            function validateNumber(value) {
+                if (!value) {
+                    alert('Preencha o campo!');
+                    return null;
+                }
+                const num = parseFloat(value.replace(',', '.'));
+                if (isNaN(num) || num <= 0) {
+                    alert('Digite apenas números maiores que zero!');
+                    return null;
+                }
+                return num;
             }
 
-            const totalMeasure = m1 * m2 * m3;
-            const totalPrice = totalMeasure * currentService.price;
+            // CALCULAR ORÇAMENTO
+            document.getElementById('calculate-btn').addEventListener('click', function() {
+                const m1 = validateNumber(document.getElementById('measure1').value);
+                const m2 = validateNumber(document.getElementById('measure2').value);
+                if (!m1 || !m2) return;
 
-            const resultText = `
+                let m3 = 1;
+                if (currentService.hasThirdMeasure) {
+                    m3 = validateNumber(document.getElementById('measure3').value);
+                    if (!m3) return;
+                }
+
+                const totalMeasure = m1 * m2 * m3;
+                const totalPrice = totalMeasure * currentService.price;
+
+                const resultText = `
 📌 SERVIÇO: ${currentService.name}
 📏 TIPO: ${currentService.type}
 📐 MEDIDAS: ${m1}m x ${m2}m ${currentService.hasThirdMeasure ? `x ${m3}m` : ''}
 📊 MEDIDA TOTAL: ${totalMeasure.toFixed(2).replace('.', ',')} ${currentService.type}
 💵 VALOR UNITÁRIO: R$ ${currentService.price.toFixed(2).replace('.', ',')}
 💰 VALOR TOTAL: R$ ${totalPrice.toFixed(2).replace('.', ',')}
-            `;
-            document.getElementById('result-box').textContent = resultText;
-        });
+                `;
+                document.getElementById('result-box').textContent = resultText;
+            });
 
-        // ADICIONAR OBSERVAÇÃO
-        document.getElementById('add-obs-btn').addEventListener('click', () => {
-            const obsText = document.getElementById('observation').value.trim();
-            if (!obsText) return;
+            // ADICIONAR OBSERVAÇÃO
+            document.getElementById('add-obs-btn').addEventListener('click', function() {
+                const obsText = document.getElementById('observation').value.trim();
+                if (!obsText) return;
 
-            if (obsText.toLowerCase() === 'apagar') {
-                if (observations.length > 0) {
-                    observations.pop();
-                    alert('Última observação removida!');
+                if (obsText.toLowerCase() === 'apagar') {
+                    if (observations.length > 0) {
+                        observations.pop();
+                        alert('Última observação removida!');
+                    } else {
+                        alert('Nenhuma observação para apagar!');
+                    }
                 } else {
-                    alert('Nenhuma observação para apagar!');
+                    observations.push(obsText);
+                    alert('Observação adicionada!');
                 }
-            } else {
-                observations.push(obsText);
-                alert('Observação adicionada!');
+
+                updateObservations();
+                document.getElementById('observation').value = '';
+            });
+
+            function updateObservations() {
+                const list = document.getElementById('observations-list');
+                if (observations.length === 0) {
+                    list.textContent = 'Nenhuma observação adicionada.';
+                } else {
+                    list.textContent = observations.map((obs, i) => `${i+1} - ${obs}`).join('\n');
+                }
             }
 
-            updateObservations();
-            document.getElementById('observation').value = '';
-        });
+            // GERAR PDF COMPLETO
+            document.getElementById('generate-pdf-btn').addEventListener('click', function() {
+                const result = document.getElementById('result-box').textContent;
+                if (!result) {
+                    alert('Calcule o orçamento primeiro!');
+                    return;
+                }
 
-        function updateObservations() {
-            const list = document.getElementById('observations-list');
-            if (observations.length === 0) {
-                list.textContent = 'Nenhuma observação adicionada.';
-            } else {
-                list.textContent = observations.map((obs, i) => `${i+1} - ${obs}`).join('\n');
-            }
-        }
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
-        // GERAR PDF
-        document.getElementById('generate-pdf-btn').addEventListener('click', () => {
-            const result = document.getElementById('result-box').textContent;
-            if (!result) {
-                alert('Calcule o orçamento primeiro!');
-                return;
-            }
+                // CABEÇALHO
+                pdf.setFontSize(20);
+                pdf.text('William Empreiteiro - Orçamento', 105, 20, { align: 'center' });
+                pdf.line(10, 25, 200, 25);
 
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-
-            // CABEÇALHO
-            pdf.setFontSize(20);
-            pdf.text('William Empreiteiro - Orçamento', 105, 20, { align: 'center' });
-            pdf.line(10, 25, 200, 25);
-
-            // DADOS DO ORÇAMENTO
-            pdf.setFontSize(14);
-            pdf.text('DADOS DO ORÇAMENTO', 10, 40);
-            pdf.text(result.replace(/\n/g, '\n'), 10, 55);
-
-            // DADOS DO CLIENTE
-            pdf.addPage();
-            pdf.setFontSize(14);
-            pdf.text('DADOS DO CLIENTE', 10, 40);
-            const name = document.getElementById('client-name').value || 'Não informado';
-            const address = document.getElementById('client-address').value || 'Não informado';
-            const date = document.getElementById('client-date').value || new Date().toLocaleDateString('pt-BR');
-            pdf.text(`Nome: ${name}`, 10, 55);
-            pdf.text(`Endereço: ${address}`, 10, 70);
-            pdf.text(`Data: ${date}`, 10, 85);
-
-            // OBSERVAÇÕES
-            pdf.addPage();
-            pdf.setFontSize(14);
-            pdf.text('OBSERVAÇÕES', 10, 40);
-            const obs = observations.length > 0 ? observations.map(o => `- ${o}`).join('\n') : 'Nenhuma observação.';
-            pdf.text(obs, 10, 55);
-
-            // SALVAR
-            const fileName = prompt('Digite o nome do arquivo:', 'Orçamento_William');
-            pdf.save(`${fileName || 'Orçamento_William'}.pdf`);
-            alert('PDF gerado com sucesso!');
-        });
-
-        // INICIALIZA
+                // DADOS DO ORÇAMENTO
+                pdf.setFontSize(14);
+                pdf.text('DADOS DO ORÇAMENTO', 10, 40);
+                pdf.text(result.replace(/\n/g, '\n
