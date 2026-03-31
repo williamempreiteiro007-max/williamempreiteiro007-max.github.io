@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>William Empreiteiro - Sistema de Orçamentos</title>
+    <title>William Pedreiro Geral - Sistema de Orçamentos</title>
     <style>
         * {
             margin: 0;
@@ -14,329 +14,350 @@
 
         body {
             background-color: #f5f5f5;
-            padding: 15px;
-            font-size: 18px; /* Ajustado para ficar melhor no celular */
+            padding: 10px;
         }
 
         .container {
-            background-color: #fff;
-            padding: 20px;
+            background-color: white;
+            max-width: 500px;
+            margin: 0 auto 15px auto;
+            padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        h1 {
-            font-size: 24px; /* Título principal em 24pt */
-            text-align: center;
-            color: #2d5d2a;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #2d5d2a;
-            line-height: 1.3;
-        }
-
-        h2 {
-            font-size: 22px; /* Títulos de seção em 22pt */
-            color: #2d5d2a;
-            margin: 15px 0 10px;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 15px;
-            background-color: #2d5d2a;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 20px;
-            cursor: pointer;
-            margin: 8px 0;
-            transition: background-color 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #1e401c;
-        }
-
-        .btn-secundario {
-            background-color: #555;
-        }
-
-        .btn-secundario:hover {
-            background-color: #333;
-        }
-
-        .opcao-servico {
-            padding: 12px;
-            border: 2px solid #2d5d2a;
-            border-radius: 4px;
-            margin: 5px 0;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            text-align: center;
-        }
-
-        .opcao-servico:hover {
-            background-color: #e8f5e9;
-        }
-
-        label {
-            display: block;
-            margin: 10px 0 5px;
-            font-weight: bold;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #2d5d2a;
-            border-radius: 4px;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 4px;
-            margin: 10px 0;
-            font-weight: bold;
-            line-height: 1.4;
-        }
-
-        .alert-sucesso {
-            background-color: #e8f5e9;
-            color: #1e401c;
-            border: 1px solid #2d5d2a;
-        }
-
-        .alert-erro {
-            background-color: #ffebee;
-            color: #b71c1c;
-            border: 1px solid #f44336;
-        }
-
-        .alert-info {
-            background-color: #e3f2fd;
-            color: #0d47a1;
-            border: 1px solid #2196f3;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
         }
 
         .hidden {
             display: none;
         }
 
-        .grid-servicos {
-            display: grid;
-            gap: 10px;
+        h1 {
+            font-size: 22px;
+            color: #2d5d2a;
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2d5d2a;
         }
 
-        .obs-linha {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin: 5px 0;
-            padding: 8px;
-            background-color: #f8f8f8;
+        h2 {
+            font-size: 20px;
+            color: #2d5d2a;
+            margin: 10px 0 8px 0;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #2d5d2a;
+            color: white;
+            border: none;
             border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 6px 0;
         }
 
-        .obs-linha button {
-            padding: 5px 10px;
-            font-size: 16px;
+        .btn-secundario {
+            background-color: #555;
         }
 
-        p {
-            margin-bottom: 10px;
+        .opcao-servico {
+            padding: 10px;
+            border: 2px solid #2d5d2a;
+            border-radius: 4px;
+            margin: 4px 0;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .opcao-servico:hover {
+            background-color: #e8f5e8;
+        }
+
+        .opcao-sair {
+            background-color: #ffebee;
+            border-color: #f44336;
+            color: #b71c1c;
+        }
+
+        .opcao-sair:hover {
+            background-color: #ffcdd2;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin: 8px 0;
             line-height: 1.4;
         }
+
+        .alert-info {
+            background-color: #e3f2fd;
+            color: #0d47a1;
+            border: 1px solid #bbdefb;
+        }
+
+        .alert-sucesso {
+            background-color: #e8f5e8;
+            color: #1b5e20;
+            border: 1px solid #c8e6c9;
+        }
+
+        label {
+            display: block;
+            margin: 8px 0 4px 0;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #2d5d2a;
+            border-radius: 4px;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
     </style>
-    <!-- Biblioteca para gerar PDF no navegador -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
-    <!-- Tela Inicial -->
+    <!-- TELA INICIAL -->
     <div id="tela-inicial" class="container">
-        <h1>William Pedreiro Geral. - SISTEMA DE ORÇAMENTOS</h1>
-        <div class="alert-info">
+        <h1>William Pedreiro Geral<br>SISTEMA DE ORÇAMENTOS</h1>
+        <div class="alert alert-info">
             <p>📏 TIPOS DE CÁLCULO:</p>
             <p>➡️ M² = HORIZONTAL X VERTICAL</p>
             <p>➡️ M³ = HORIZONTAL X VERTICAL X PROFUNDIDADE</p>
         </div>
-        <div class="alert-sucesso">
+        <div class="alert alert-sucesso">
             <p>💰 VALORES CONFIRMADOS:</p>
             <p>✅ ALVENARIA: R$52,00 POR M²</p>
             <p>✅ REBOCO: R$35,00 POR M²</p>
-            <p>✅ ACABAMENTO (PORCELANATO): R$60,00 POR M²</p>
-            <p>✅ ACABAMENTO (CERÂMICA): R$40,00 POR M²</p>
-            <p>✅ CONCRETO: R$150,00 POR M³</p>
+            <p>✅ PORCELANATO: R$60,00 POR M²</p>
+            <p>✅ CERÂMICA: R$40,00 POR M²</p>
+            <p>✅ CONCRETO: R$300,00 POR M³</p>
             <p>✅ GESSO: R$20,00 POR M²</p>
         </div>
-        <p>📂 PDF SERÁ SALVO NA PASTA DOWNLOADS OU VOCÊ ESCOLHE O LOCAL!</p>
-        <p>📄 VOCÊ DEFINE O NOME DO ARQUIVO PDF!</p>
-        <button class="btn" onclick="irParaMenu()">🔘 APERTE PARA COMEÇAR...</button>
+        <button class="btn" onclick="irParaMenu()">🔘 INICIAR SISTEMA</button>
     </div>
 
-    <!-- Menu de Serviços -->
-    <div id="menu-servicos" class="container hidden">
-        <h1>🔨 OPÇÕES DE SERVIÇOS</h1>
-        <div class="grid-servicos">
-            <div class="opcao-servico" onclick="selecionarServico('1')">
-                1 - ALVENARIA (M²) - APENAS MÃO DE OBRA
-            </div>
-            <div class="opcao-servico" onclick="selecionarServico('2')">
-                2 - REBOCO (M²) - APENAS MÃO DE OBRA
-            </div>
-            <div class="opcao-servico" onclick="selecionarServico('3')">
-                3 - ACABAMENTO (PORCELANATO) (M²)
-            </div>
-            <div class="opcao-servico" onclick="selecionarServico('4')">
-                4 - ACABAMENTO (CERÂMICA) (M²)
-            </div>
-            <div class="opcao-servico" onclick="selecionarServico('5')">
-                5 - CONCRETO (M³) - APENAS MÃO DE OBRA
-            </div>
-            <div class="opcao-servico" onclick="selecionarServico('6')">
-                6 - GESSO (M²) - APENAS MÃO DE OBRA
-            </div>
-            <div class="opcao-servico" style="background-color: #ffebee; border-color: #f44336;" onclick="sairPrograma()">
-                7 - SAIR
-            </div>
-        </div>
+    <!-- TELA MENU -->
+    <div id="tela-menu" class="container hidden">
+        <h1>🔨 OPÇÕES DE SERVIÇO</h1>
+        <div class="opcao-servico" onclick="selecionarServico(1)">1 - ALVENARIA (M²)</div>
+        <div class="opcao-servico" onclick="selecionarServico(2)">2 - REBOCO (M²)</div>
+        <div class="opcao-servico" onclick="selecionarServico(3)">3 - PORCELANATO (M²)</div>
+        <div class="opcao-servico" onclick="selecionarServico(4)">4 - CERÂMICA (M²)</div>
+        <div class="opcao-servico" onclick="selecionarServico(5)">5 - CONCRETO (M³)</div>
+        <div class="opcao-servico" onclick="selecionarServico(6)">6 - GESSO (M²)</div>
+        <div class="opcao-servico opcao-sair" onclick="sairSistema()">7 - SAIR</div>
     </div>
 
-    <!-- Tela de Cálculos -->
+    <!-- TELA DE CÁLCULO -->
     <div id="tela-calculo" class="container hidden">
-        <h1 id="titulo-servico"></h1>
+        <h1>📌 SERVIÇO SELECIONADO</h1>
+        <p id="nome-servico"></p>
         <p id="desc-servico"></p>
-        <p id="valor-metro"></p>
+        <p id="valor-por-metro"></p>
 
         <div id="campos-m2" class="hidden">
-            <label for="horizontal">➡️ HORIZONTAL (m):</label>
-            <input type="number" id="horizontal" step="0.01" min="0" required>
+            <label>HORIZONTAL (m):</label>
+            <input type="number" id="h-m2" step="0.01" min="0">
 
-            <label for="vertical">⬆️ VERTICAL (m):</label>
-            <input type="number" id="vertical" step="0.01" min="0" required>
+            <label>VERTICAL (m):</label>
+            <input type="number" id="v-m2" step="0.01" min="0">
         </div>
 
         <div id="campos-m3" class="hidden">
-            <label for="horizontal-m3">➡️ HORIZONTAL (m):</label>
-            <input type="number" id="horizontal-m3" step="0.01" min="0" required>
+            <label>HORIZONTAL (m):</label>
+            <input type="number" id="h-m3" step="0.01" min="0">
 
-            <label for="vertical-m3">⬆️ VERTICAL (m):</label>
-            <input type="number" id="vertical-m3" step="0.01" min="0" required>
+            <label>VERTICAL (m):</label>
+            <input type="number" id="v-m3" step="0.01" min="0">
 
-            <label for="profundidade">📏 PROFUNDIDADE/ALTURA (m):</label>
-            <input type="number" id="profundidade" step="0.01" min="0" required>
+            <label>PROFUNDIDADE (m):</label>
+            <input type="number" id="p-m3" step="0.01" min="0">
         </div>
 
-        <button class="btn" onclick="calcularValor()">🔢 CALCULAR VALOR TOTAL</button>
-        <button class="btn btn-secundario" onclick="voltarParaMenu()">🔙 VOLTAR AO MENU</button>
+        <button class="btn" onclick="calcularValor()">🔢 CALCULAR</button>
+        <button class="btn btn-secundario" onclick="voltarMenu()">🔙 VOLTAR</button>
     </div>
 
-    <!-- Tela de Resultados -->
+    <!-- TELA DE RESULTADO -->
     <div id="tela-resultado" class="container hidden">
-        <h1>📊 RESULTADO DOS CÁLCULOS</h1>
-        <div id="resultado-calculo" class="alert-sucesso"></div>
-        <div id="detalhes-calculo"></div>
+        <h1>📊 RESULTADO FINAL</h1>
+        <div class="alert alert-sucesso" id="resultado-final"></div>
+        <p id="detalhes-calculo"></p>
 
-        <label for="alterar-valor">✏️ DESEJA ALTERAR O VALOR TOTAL? (SIM/NAO)</label>
-        <select id="alterar-valor" onchange="mostrarCampoNovoValor()">
+        <label>ALTERAR VALOR TOTAL? (SIM/NAO)</label>
+        <select id="alterar-valor">
             <option value="NAO">NAO</option>
             <option value="SIM">SIM</option>
         </select>
 
         <div id="campo-novo-valor" class="hidden">
-            <label for="novo-valor">💵 NOVO VALOR TOTAL: R$</label>
+            <label>NOVO VALOR (R$):</label>
             <input type="number" id="novo-valor" step="0.01" min="0">
-            <button class="btn" onclick="atualizarValorTotal()">✅ ATUALIZAR VALOR</button>
         </div>
-
-        <label for="salvar-calculos">✏️ DESEJA SALVAR OS CÁLCULOS NO PDF? (SIM/NAO)</label>
-        <select id="salvar-calculos">
-            <option value="NAO">NAO</option>
-            <option value="SIM">SIM</option>
-        </select>
 
         <h2>👤 DADOS DO CLIENTE</h2>
-        <label for="nome-cliente">🆔 NOME:</label>
-        <input type="text" id="nome-cliente" required>
+        <label>NOME:</label>
+        <input type="text" id="nome-cliente">
 
-        <label for="data-orcamento">📅 DATA:</label>
-        <input type="date" id="data-orcamento" required>
+        <label>DATA:</label>
+        <input type="date" id="data-orcamento">
 
-        <label for="endereco-obra">📍 ENDEREÇO DA OBRA:</label>
-        <input type="text" id="endereco-obra" required>
+        <label>ENDEREÇO:</label>
+        <input type="text" id="endereco-cliente">
 
-        <label for="email-cliente">📧 E-MAIL (OPCIONAL):</label>
-        <input type="email" id="email-cliente">
+        <label>OBSERVAÇÕES:</label>
+        <input type="text" id="observacoes">
 
-        <label for="telefone-cliente">📞 TELEFONE (OPCIONAL):</label>
-        <input type="text" id="telefone-cliente">
+        <label>NOME DO PDF:</label>
+        <input type="text" id="nome-pdf" value="ORCAMENTO_PADRAO">
 
-        <h2>📝 OBSERVAÇÕES</h2>
-        <p>Digite cada observação e clique em "ADICIONAR". Use "APAGAR ÚLTIMA" se precisar corrigir.</p>
-        <input type="text" id="nova-observacao" placeholder="Digite uma observação...">
-        <div style="display: flex; gap: 10px;">
-            <button class="btn" style="flex: 1;" onclick="adicionarObservacao()">➕ ADICIONAR</button>
-            <button class="btn btn-secundario" style="flex: 1;" onclick="apagarUltimaObservacao()">❌ APAGAR ÚLTIMA</button>
-        </div>
-        <div id="lista-observacoes"></div>
-
-        <label for="nome-arquivo-pdf">📄 NOME DO ARQUIVO PDF (sem .pdf):</label>
-        <input type="text" id="nome-arquivo-pdf" placeholder="Ex: ORCAMENTO_JOAO_SILVA" value="ORCAMENTO_PADRAO">
-
-        <button class="btn" onclick="gerarPDF()">💪 GERAR ORÇAMENTO EM PDF</button>
-        <button class="btn btn-secundario" onclick="voltarParaMenu()">🔙 VOLTAR AO MENU PRINCIPAL</button>
+        <button class="btn" onclick="gerarPDF()">💾 GERAR PDF</button>
+        <button class="btn btn-secundario" onclick="voltarMenu()">🔙 VOLTAR</button>
     </div>
+const servicos = {
+    1: {nome: "ALVENARIA", tipo: "M²", valor: 52.00, desc: "Mão de obra para alvenaria"},
+    2: {nome: "REBOCO", tipo: "M²", valor: 35.00, desc: "Mão de obra para reboco"},
+    3: {nome: "PORCELANATO", tipo: "M²", valor: 60.00, desc: "Mão de obra para porcelanato"},
+    4: {nome: "CERÂMICA", tipo: "M²", valor: 40.00, desc: "Mão de obra para cerâmica"},
+    5: {nome: "CONCRETO", tipo: "M³", valor: 300.00, desc: "Mão de obra para concreto"},
+    6: {nome: "GESSO", tipo: "M²", valor: 20.00, desc: "Mão de obra para gesso"}
+};
 
-    <script>
-        // Dados dos serviços (igual ao script Python)
-        const servicos = {
-            "1": {"nome": "ALVENARIA", "tipo": "M²", "valor": 35.00, "desc": "Apenas mão de obra para alvenaria"},
-            "2": {"nome": "REBOCO", "tipo": "M²", "valor": 30.00, "desc": "Apenas mão de obra para reboco de paredes"},
-            "3": {"nome": "ACABAMENTO (PORCELANATO)", "tipo": "M²", "valor": 60.00, "desc": "Apenas mão de obra para assentamento de porcelanato"},
-            "4": {"nome": "ACABAMENTO (CERÂMICA)", "tipo": "M²", "valor": 30.00, "desc": "Apenas mão de obra para assentamento de cerâmica"},
-            "5": {"nome": "CONCRETO", "tipo": "M³", "valor": 300.00, "desc": "Apenas mão de obra para estruturas"},
-            "6": {"nome": "GESSO", "tipo": "M²", "valor": 20.00, "desc": "Apenas mão de obra - valor fixo em R$20,00 por m²"}
-        };
+let servicoAtual = null;
+let valorTotal = 0;
+let medidaTotal = 0;
 
-        // Variáveis globais
-        let servicoAtual = null;
-        let medidaTotal = 0;
-        let valorTotal = 0;
-        let detalhesCalculos = "";
-        let observacoes = [];
+// FUNÇÕES DE NAVEGAÇÃO
+function irParaMenu() {
+    document.getElementById('tela-inicial').classList.add('hidden');
+    document.getElementById('tela-menu').classList.remove('hidden');
+}
 
-        // Funções auxiliares (igual ao Python)
-        function formatarNumero(num) {
-            if (isNaN(num)) return num;
-            const numFormatado = num.toLocaleString('pt-BR', {
-                minimumFractionDigits: num % 1 === 0 ? 0 : 2,
-                maximumFractionDigits: 2
-            });
-            return numFormatado;
+function voltarMenu() {
+    document.getElementById('tela-calculo').classList.add('hidden');
+    document.getElementById('tela-resultado').classList.add('hidden');
+    document.getElementById('tela-menu').classList.remove('hidden');
+}
+
+function sairSistema() {
+    if (confirm("DESEJA SAIR DO SISTEMA?")) {
+        location.reload();
+    }
+}
+
+// SELECIONAR SERVIÇO
+function selecionarServico(id) {
+    servicoAtual = servicos[id];
+    document.getElementById('tela-menu').classList.add('hidden');
+    document.getElementById('tela-calculo').classList.remove('hidden');
+    
+    document.getElementById('nome-servico').textContent = servicoAtual.nome;
+    document.getElementById('desc-servico').textContent = servicoAtual.desc;
+    document.getElementById('valor-por-metro').textContent = `VALOR POR ${servicoAtual.tipo}: R$ ${servicoAtual.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+
+    if (servicoAtual.tipo === "M²") {
+        document.getElementById('campos-m2').classList.remove('hidden');
+    } else {
+        document.getElementById('campos-m3').classList.remove('hidden');
+    }
+}
+
+// CALCULAR VALOR
+function calcularValor() {
+    if (servicoAtual.tipo === "M²") {
+        const h = parseFloat(document.getElementById('h-m2').value.replace(',', '.'));
+        const v = parseFloat(document.getElementById('v-m2').value.replace(',', '.'));
+        
+        if (isNaN(h) || isNaN(v) || h <= 0 || v <= 0) {
+            alert("DIGITE MEDIDAS VÁLIDAS!");
+            return;
         }
 
-        function validarNumero(valor) {
-            const num = parseFloat(valor.replace(',', '.'));
-            return !isNaN(num) && num >= 0 ? num : null;
+        medidaTotal = h * v;
+    } else {
+        const h = parseFloat(document.getElementById('h-m3').value.replace(',', '.'));
+        const v = parseFloat(document.getElementById('v-m3').value.replace(',', '.'));
+        const p = parseFloat(document.getElementById('p-m3').value.replace(',', '.'));
+        
+        if (isNaN(h) || isNaN(v) || isNaN(p) || h <= 0 || v <= 0 || p <= 0) {
+            alert("DIGITE MEDIDAS VÁLIDAS!");
+            return;
         }
 
-        // Funções de navegação
-        function irParaMenu() {
-            document.getElementById('tela-inicial').classList.add('hidden');
-            document.getElementById('menu-servicos').classList.remove('hidden');
-        }
+        medidaTotal = h * v * p;
+    }
 
-        function voltarParaMenu() {
-            document.querySelectorAll('.container').
+    valorTotal = medidaTotal * servicoAtual.valor;
+    document.getElementById('resultado-final').textContent = `MEDIDA TOTAL: ${medidaTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}${servicoAtual.tipo} | VALOR TOTAL: R$ ${valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    document.getElementById('detalhes-calculo').textContent = `FÓRMULA: ${servicoAtual.tipo} = ${servicoAtual.tipo === "M²" ? "HORIZONTAL X VERTICAL" : "HORIZONTAL X VERTICAL X PROFUNDIDADE"} | VALOR POR UNIDADE: R$ ${servicoAtual.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    
+    document.getElementById('tela-calculo').classList.add('hidden');
+    document.getElementById('tela-resultado').classList.remove('hidden');
+}
+
+// MOSTRAR/NÃO MOSTRAR CAMPO DE NOVO VALOR
+document.getElementById('alterar-valor').addEventListener('change', function() {
+    if (this.value === "SIM") {
+        document.getElementById('campo-novo-valor').classList.remove('hidden');
+    } else {
+        document.getElementById('campo-novo-valor').classList.add('hidden');
+    }
+});
+
+// ATUALIZAR VALOR MANUALMENTE
+function atualizarValor() {
+    const novoValor = parseFloat(document.getElementById('novo-valor').value.replace(',', '.'));
+    if (!isNaN(novoValor) && novoValor > 0) {
+        valorTotal = novoValor;
+        document.getElementById('resultado-final').textContent = `MEDIDA TOTAL: ${medidaTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}${servicoAtual.tipo} | VALOR TOTAL: R$ ${valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        alert("VALOR ATUALIZADO!");
+    } else {
+        alert("DIGITE UM VALOR VÁLIDO!");
+    }
+}
+
+// GERAR PDF COMPLETO
+function gerarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // TÍTULO
+    doc.setFontSize(18);
+    doc.text("ORÇAMENTO - WILLIAM PEDREIRO GERAL", 15, 20);
+    doc.setFontSize(12);
+    doc.text(`DATA: ${new Date().toLocaleDateString('pt-BR')}`, 15, 30);
+
+    // DADOS DO CLIENTE
+    doc.text("DADOS DO CLIENTE:", 15, 40);
+    const nomeCliente = document.getElementById('nome-cliente').value || "NÃO INFORMADO";
+    const dataOrcamento = document.getElementById('data-orcamento').value || new Date().toLocaleDateString('pt-BR');
+    const enderecoCliente = document.getElementById('endereco-cliente').value || "NÃO INFORMADO";
+    const observacoes = document.getElementById('observacoes').value || "NENHUMA OBSERVAÇÃO";
+    
+    doc.text(`NOME: ${nomeCliente}`, 15, 50);
+    doc.text(`DATA DO ORÇAMENTO: ${dataOrcamento}`, 15, 60);
+    doc.text(`ENDEREÇO: ${enderecoCliente}`, 15, 70);
+
+    // DADOS DO SERVIÇO
+    doc.text("DADOS DO SERVIÇO:", 15, 85);
+    doc.text(`SERVIÇO: ${servicoAtual.nome}`, 15, 95);
+    doc.text(`DESCRIÇÃO: ${servicoAtual.desc}`, 15, 105);
+    doc.text(`MEDIDA TOTAL: ${medidaTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}${servicoAtual.tipo}`, 15, 115);
+    doc.text(`VALOR TOTAL: R$ ${valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 15, 125);
+    doc.text(`OBSERVAÇÕES: ${observacoes}`, 15, 140);
+
+    // RODAPÉ
+    doc.setFontSize(10);
+    doc.text("ORÇAMENTO GERADO PELO SISTEMA WILLIAM PEDREIRO GERAL", 15, 280);
+
+    // SALVAR PDF
+    const nomePDF = document.getElementById('nome-pdf').value || "ORCAMENTO_PADRAO";
+    doc.save(`${nomePDF}.pdf`);
+    alert("PDF GERADO COM SUCESSO!");
+}
