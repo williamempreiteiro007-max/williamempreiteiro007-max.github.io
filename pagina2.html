@@ -4,7 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>William Empreiteiro - Orçamento</title>
-    <link rel="stylesheet" href="global.css">
+    <!-- LINK PARA O CSS GLOBAL -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            color: #2d5d2a;
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+
+        .result-box {
+            background-color: #f8f9fa;
+            border: 1px solid #2d5d2a;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            font-size: 18px;
+            white-space: pre-line;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #2d5d2a;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -33,14 +112,32 @@
         <button class="btn btn-secondary" id="back-btn">VOLTAR PARA SELEÇÃO</button>
     </div>
 
-    <script src="global.js"></script>
     <script>
-        // CARREGAR DADOS DO SERVIÇO SELECIONADO
+        // DADOS GLOBAIS DOS SERVIÇOS
+        const SERVICES = {
+            1: { name: "ALVENARIA", type: "m²", price: 52.00 },
+            2: { name: "REBOCO", type: "m²", price: 35.00 },
+            3: { name: "PORCELANATO", type: "m²", price: 60.00 },
+            4: { name: "CERÂMICA", type: "m²", price: 40.00 },
+            5: { name: "CONCRETO", type: "m³", price: 150.00 },
+            6: { name: "GESSO", type: "m²", price: 20.00 }
+        };
+
+        // FUNÇÕES DE ARMAZENAMENTO
+        function saveData(key, value) {
+            localStorage.setItem(key, value);
+        }
+
+        function loadData(key) {
+            return localStorage.getItem(key);
+        }
+
+        // CARREGAR DADOS DO SERVIÇO
         const serviceId = loadData('serviceId');
         const service = SERVICES[serviceId];
         
         // MOSTRAR MEDIDA 3 SE FOR CONCRETO
-        if (service.type === 'm³') {
+        if (service && service.type === 'm³') {
             document.getElementById('med3-group').style.display = 'block';
         }
 
@@ -50,37 +147,44 @@
             const m2 = parseFloat(document.getElementById('med2').value);
             let m3 = 1;
 
-            if (service.type === 'm³') {
+            if (service && service.type === 'm³') {
                 m3 = parseFloat(document.getElementById('med3').value);
             }
 
-            if (isNaN(m1) || isNaN(m2) || (service.type === 'm³' && isNaN(m3))) {
-                alert('PREENCHA TODAS AS MEDIDAS!');
+            if (isNaN(m1) || isNaN(m2) || m1 <=0 || m2 <=0) {
+                alert('PREENCHA MEDIDAS VÁLIDAS!');
                 return;
             }
 
-            const totalMeasure = service.type === 'm³' ? m1 * m2 * m3 : m1 * m2;
-            const totalPrice = totalMeasure * service.price;
+            if (service && service.type === 'm³' && (isNaN(m3) || m3 <=0)) {
+                alert('PREENCHA A MEDIDA 3!');
+                return;
+            }
+
+            const totalMeasure = service && service.type === 'm³' ? m1 * m2 * m3 : m1 * m2;
+            const totalPrice = totalMeasure * (service ? service.price : 0);
 
             document.getElementById('result-box').textContent = `
-MEDIDAS: ${m1}m x ${m2}m ${service.type === 'm³' ? `x ${m3}m` : ''}
-TOTAL: ${totalMeasure.toFixed(2)} ${service.type}
+MEDIDAS: ${m1}m x ${m2}m ${service && service.type === 'm³' ? `x ${m3}m` : ''}
+TOTAL: ${totalMeasure.toFixed(2).replace('.', ',')} ${service ? service.type : ''}
 VALOR TOTAL: R$ ${totalPrice.toFixed(2).replace('.', ',')}
             `;
 
-            // SALVAR DADOS DO ORÇAMENTO
             saveData('totalMeasure', totalMeasure);
             saveData('totalPrice', totalPrice);
         });
 
         // NAVEGAÇÃO
-        document.getElementById('back-btn').addEventListener('click', () => goToPage('pagina1.html'));
+        document.getElementById('back-btn').addEventListener('click', () => {
+            window.location.href = 'pagina1.html';
+        });
+
         document.getElementById('next-btn').addEventListener('click', () => {
             if (!loadData('totalPrice')) {
                 alert('CALCULE O ORÇAMENTO PRIMEIRO!');
                 return;
             }
-            goToPage('pagina3.html');
+            window.location.href = 'pagina3.html';
         });
     </script>
 </body>
