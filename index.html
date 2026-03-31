@@ -3,94 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Orçamentos</title>
+    <title>William Empreiteiro - Orçamentos</title>
     <style>
-        body {
-            padding: 10px;
-            font-family: Arial;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
+
+        body {
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h1, h2 {
+            color: #2d5d2a;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 22px;
+            border-bottom: 2px solid #2d5d2a;
+            padding-bottom: 10px;
+            text-align: left;
+        }
+
         button {
             width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            background: green;
-            color: white;
+            padding: 15px;
+            margin: 8px 0;
             border: none;
+            border-radius: 5px;
+            background-color: #2d5d2a;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1e3d1c;
+        }
+
+        .input-group {
+            margin: 10px 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             font-size: 16px;
         }
-        .tela {
+
+        .detalhes-box {
+            background-color: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            white-space: pre-line;
+        }
+
+        .oculta {
             display: none;
         }
-        .mostrar {
-            display: block;
+
+        .info-texto {
+            margin: 15px 0;
+            font-size: 16px;
+            line-height: 1.6;
         }
     </style>
+    <!-- Biblioteca para gerar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
+    <div class="container">
+        <!-- TELA INICIAL -->
+        <div id="tela-inicial">
+            <h1>William Pedreiro Geral</h1>
+            <h2>SISTEMA DE ORÇAMENTOS</h2>
+            <div class="info-texto">
+                📏 TIPOS DE CÁLCULO:<br>
+                ➡️ M² = HORIZONTAL X VERTICAL<br>
+                ➡️ M³ = HORIZONTAL X VERTICAL X PROFUNDIDADE<br><br>
 
-<div>
-    <!-- TELA INICIAL -->
-    <div id="tela-inicial" class="tela mostrar">
-        <h1>SISTEMA DE ORÇAMENTOS</h1>
-        <button onclick="irParaTela('servicos')">VER SERVIÇOS</button>
-    </div>
-    <!-- TELA DE SERVIÇOS -->
-    <div id="servicos" class="tela">
-        <h2>OPÇÕES DE SERVIÇOS</h2>
-        <button onclick="calcular(1)">1 - ALVENARIA (R$52/m²)</button>
-        <button onclick="calcular(2)">2 - REBOCO (R$35/m²)</button>
-        <button onclick="calcular(3)">3 - PORCELANATO (R$60/m²)</button>
-        <button onclick="calcular(4)">4 - CERÂMICA (R$40/m²)</button>
-        <button onclick="calcular(5)">5 - CONCRETO (R$150/m³)</button>
-        <button onclick="calcular(6)">6 - GESSO (R$20/m²)</button>
-        <button onclick="irParaTela('inicial')">VOLTAR</button>
-    </div>
+                💰 VALORES CONFIRMADOS:<br>
+                ✅ ALVENARIA: R$52,00 POR M²<br>
+                ✅ REBOCO: R$35,00 POR M²<br>
+                ✅ ACABAMENTO (PORCELANATO): R$60,00 POR M²<br>
+                ✅ ACABAMENTO (CERÂMICA): R$40,00 POR M²<br>
+                ✅ CONCRETO: R$150,00 POR M³<br>
+                ✅ GESSO: R$20,00 POR M²<br><br>
+
+                📂 PASTA USADA: DuWilliam17<br>
+                📄 VOCÊ DEFINE O NOME DO ARQUIVO!
+            </div>
+            <button onclick="irParaTela('tela-servicos')">COMEÇAR</button>
+        </div>
+        <!-- TELA DE SERVIÇOS -->
+        <div id="tela-servicos" class="oculta">
+            <h2>🔨 OPÇÕES DE SERVIÇOS</h2>
+            <button onclick="selecionarServico('1')">1 - ALVENARIA (M²)</button>
+            <button onclick="selecionarServico('2')">2 - REBOCO (M²)</button>
+            <button onclick="selecionarServico('3')">3 - ACABAMENTO (PORCELANATO)</button>
+            <button onclick="selecionarServico('4')">4 - ACABAMENTO (CERÂMICA)</button>
+            <button onclick="selecionarServico('5')">5 - CONCRETO (M³)</button>
+            <button onclick="selecionarServico('6')">6 - GESSO (M²)</button>
+            <button onclick="irParaTela('tela-inicial')">VOLTAR PARA INÍCIO</button>
+        </div>
+
         <!-- TELA DE CÁLCULO -->
-    <div id="calculos" class="tela">
-        <h2>CÁLCULO FINAL</h2>
-        <div id="resultado"></div>
-        <button onclick="irParaTela('servicos')">NOVO CÁLCULO</button>
-        <button onclick="irParaTela('inicial')">VOLTAR AO INÍCIO</button>
-    </div>
+        <div id="tela-calculo" class="oculta">
+            <h2 id="titulo-servico"></h2>
+            <p id="descricao-servico" class="info-texto"></p>
+            <p class="info-texto"><strong>💵 VALOR POR METRO: R$ <span id="valor-por-metro"></span></strong></p>
 
-<script>
-// MUDAR DE TELA
-function irParaTela(nomeTela) {
-    document.querySelectorAll('.tela').forEach(t => t.classList.remove('mostrar'));
-    document.getElementById(nomeTela).classList.add('mostrar');
-}
+            <div id="campos-medidas">
+                <!-- Campos de medidas serão adicionados aqui -->
+            </div>
 
-// FAZER O CÁLCULO
-function calcular(tipo) {
-    let medida1 = prompt("Digite a LARGURA em metros:");
-    let medida2 = prompt("Digite a COMPRIMENTO em metros:");
-    let resultado = 0;
-    let valor = 0;
+            <button onclick="calcular()">CALCULAR VALOR TOTAL</button>
+            <button onclick="irParaTela('tela-servicos')">VOLTAR PARA SERVIÇOS</button>
+        </div>
+                <!-- TELA DE SERVIÇOS -->
+        <div id="tela-servicos" class="oculta">
+            <h2>🔨 OPÇÕES DE SERVIÇOS</h2>
+            <button onclick="selecionarServico('1')">1 - ALVENARIA (M²)</button>
+            <button onclick="selecionarServico('2')">2 - REBOCO (M²)</button>
+            <button onclick="selecionarServico('3')">3 - ACABAMENTO (PORCELANATO)</button>
+            <button onclick="selecionarServico('4')">4 - ACABAMENTO (CERÂMICA)</button>
+            <button onclick="selecionarServico('5')">5 - CONCRETO (M³)</button>
+            <button onclick="selecionarServico('6')">6 - GESSO (M²)</button>
+            <button onclick="irParaTela('tela-inicial')">VOLTAR PARA INÍCIO</button>
+        </div>
 
-    if(tipo == 1) valor = 52;
-    if(tipo == 2) valor = 35;
-    if(tipo == 3) valor = 60;
-    if(tipo == 4) valor = 40;
-    if(tipo == 5) valor = 150;
-    if(tipo == 6) valor = 20;
+        <!-- TELA DE CÁLCULO -->
+        <div id="tela-calculo" class="oculta">
+            <h2 id="titulo-servico"></h2>
+            <p id="descricao-servico" class="info-texto"></p>
+            <p class="info-texto"><strong>💵 VALOR POR METRO: R$ <span id="valor-por-metro"></span></strong></p>
 
-    if(tipo != 5) {
-        resultado = parseFloat(medida1) * parseFloat(medida2) * valor;
-        document.getElementById('resultado').innerHTML = `
-            Área: ${parseFloat(medida1)*parseFloat(medida2)} m²<br>
-            Valor total: R$ ${resultado.toFixed(2)}
-        `;
-    } else {
-        let medida3 = prompt("Digite a ALTURA em metros:");
-        resultado = parseFloat(medida1) * parseFloat(medida2) * parseFloat(medida3) * valor;
-        document.getElementById('resultado').innerHTML = `
-            Volume: ${parseFloat(medida1)*parseFloat(medida2)*parseFloat(medida3)} m³<br>
-            Valor total: R$ ${resultado.toFixed(2)}
-        `;
-    }
+            <div id="campos-medidas">
+                <!-- Campos de medidas serão adicionados aqui -->
+            </div>
 
-    irParaTela('calculos');
-}
-</script>
+            <button onclick="calcular()">CALCULAR VALOR TOTAL</button>
+            <button onclick="irParaTela('tela-servicos')">VOLTAR PARA SERVIÇOS</button>
+        </div>
+                        alert("❌ APENAS NÚMEROS MAIORES QUE ZERO!");
+                return;
+            }
+            dadosCalculo.valorTotal = novoValor;
+            dadosCalculo.detalhes = dadosCalculo.detalhes.replace(
+                /VALOR TOTAL: R\$ .*/, 
+                `VALOR TOTAL ALTERADO: R$ ${formatarNumero(novoValor)}`
+            );
+            document.getElementById('detalhes-calculos').textContent = dadosCalculo.detalhes;
+            ocultarAlterarValor();
+            alert("✅ VALOR ATUALIZADO COM SUCESSO!");
+        }
+
+        // FUNÇÕES PARA OBSERVAÇÕES
+        function adicionarObservacao() {
+            const texto = document.getElementById('observacoes').value.trim();
+            document.getElementById('observacoes').value = "";
+
+            if (texto === ".") {
+                alert("📝 Observações finalizadas!");
+                return;
+            }
+
+            if (texto.toLowerCase() === "apagar") {
+                if (observacoes.length > 0) {
+                    observacoes.pop();
+                    alert("❌ Última observação apagada!");
+                } else {
+                    alert("⚠️ Nenhuma observação para apagar!");
+                }
+            } else if (texto !== "") {
+                observacoes.push(texto);
+                alert("✅ Observação adicionada!");
+            } else {
+                alert("⚠️ Digite uma observação válida!");
+                return;
+            }
+
+            atualizarListaObservacoes();
+        }
+
+        function atualizarListaObservacoes() {
+            const lista = document.getElementById('lista-observacoes');
+            if (observacoes.length === 0) {
+                lista.textContent = "Nenhuma observação informada.";
+                return;
+            }
+            lista.textContent = observacoes.map((obs, i) => `- ${obs}`).join("\n");
+        }
+
+        // FUNÇÃO PARA GERAR PDF (IGUAL AO PYTHON)
+        function gerarPDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            // CONFIGURAÇÕES DE FONTE
+            const tituloPrincipal = 24;
+            const tituloSecao = 22;
+            const conteudo = 20;
+
+            // CABEÇALHO
+            pdf.setFontSize(tituloPrincipal);
+            pdf.text("William Empreiteiro - Cálculos de Obras", 105, 16, { align: 'C' });
+            pdf.setLineWidth(0.5);
+            pdf.line(10, 32, 200, 32);
+            pdf.ln(9);
+
+            // DADOS DO ORÇAMENTO
+            pdf.setFontSize(tituloSecao);
+            pdf.text("DADOS DO ORÇAMENTO", 10, 40);
+            pdf.setFontSize(conteudo);
+            const data = document.getElementById('data-orcamento').value || new Date().toLocaleDateString('pt-BR');
+            pdf.text(`Serviço: ${servicoAtual.nome}`, 10, 55);
+            pdf.text(`Tipo de Cálculo: ${servicoAtual.tipo}`, 10, 65);
+            pdf.text(`Descrição: ${servicoAtual.desc}`, 10, 75);
+            pdf.text(`Data: ${data}`, 10, 85);
+            pdf.ln(15);
+
+            // RESULTADOS DOS CÁLCULOS
+            pdf.setFontSize(tituloSecao);
+            pdf.text("RESULTADOS DOS CÁLCULOS", 10, pdf.getCurrentPageInfo().y + 5);
+            pdf.setFontSize(conteudo);
+            pdf.text(dadosCalculo.detalhes.replace(/\n/g, '\n'), 10, pdf.getCurrentPageInfo().y + 15, { lineHeightFactor: 1.2 });
+            pdf.ln(15);
+
+            // DADOS DO CLIENTE
+            pdf.setFontSize(tituloSecao);
+            pdf.text("DADOS DO CLIENTE", 10, pdf.getCurrentPageInfo().y + 5);
+            pdf.setFontSize(conteudo);
+            const nome = document.getElementById('nome-cliente').value || "Não informado";
+            const endereco = document.getElementById('endereco-obra').value || "Não informado";
+            const email = document.getElementById('email-cliente').value || "Não informado";
+            const telefone = document.getElementById('telefone-cliente').value || "Não informado";
+            
+            pdf.text(`Nome: ${nome}`, 10, pdf.getCurrentPageInfo().y + 15);
+            pdf.text(`Endereço: ${endereco}`, 10, pdf.getCurrentPageInfo().y + 25);
+            pdf.text(`E-mail: ${email}`, 10, pdf.getCurrentPageInfo().y + 35);
+            pdf.text(`Telefone: ${telefone}`, 10, pdf.getCurrentPageInfo().y + 45);
+            pdf.ln(15);
+
+            // OBSERVAÇÕES
+            pdf.setFontSize(tituloSecao);
+            pdf.text("OBSERVAÇÕES", 10, pdf.getCurrentPageInfo().y + 5);
+            pdf.setFontSize(conteudo);
+            const obsTexto = observacoes.length > 0 ? observacoes.map(o => `- ${o}`).join("\n") : "Nenhuma observação informada.";
+            pdf.text(obsTexto, 10, pdf.getCurrentPageInfo().y + 15, { lineHeightFactor: 1.2 });
+
+            // SALVAR PDF
+            const nomeArq = prompt("📄 DEFINA O NOME DO ARQUIVO (sem .pdf):", "ORCAMENTO_PADRAO") || "ORCAMENTO_PADRAO";
+            const nomeFinal = nomeArq.endsWith('.pdf') ? nomeArq : `${nomeArq}.pdf`;
+            
+            pdf.save(nomeFinal);
+            alert(`✅ PDF SALVO COMO: ${nomeFinal}\n📂 VERIFIQUE SUA PASTA DE DOWNLOADS!\n💡 PASTA PADRÃO: DuWilliam17 (se disponível no dispositivo)`);
+        }
+    </script>
 </body>
 </html>
